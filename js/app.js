@@ -3,11 +3,19 @@
 
   var STORAGE_KEY = "breatheFreelyMvp";
 
+  function normalizePath7Checks(raw) {
+    var out = [false, false, false, false, false, false, false];
+    if (!raw || !Array.isArray(raw)) return out;
+    for (var i = 0; i < 7; i++) out[i] = !!raw[i];
+    return out;
+  }
+
   var defaultState = {
     survey: null,
     quitTimestamp: null,
     pricePerPack: 250,
-    cigsPerPack: 20
+    cigsPerPack: 20,
+    path7Checks: [false, false, false, false, false, false, false]
   };
 
   function loadState() {
@@ -15,7 +23,9 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return Object.assign({}, defaultState);
       var parsed = JSON.parse(raw);
-      return Object.assign({}, defaultState, parsed);
+      var merged = Object.assign({}, defaultState, parsed);
+      merged.path7Checks = normalizePath7Checks(merged.path7Checks);
+      return merged;
     } catch (e) {
       return Object.assign({}, defaultState);
     }
@@ -219,25 +229,68 @@
     return "Цифра достойна уважения: столько можно вложить в жизнь без ежедневной кассы у прилавка.";
   }
 
+  function updatePath7Bar() {
+    var fills = document.getElementById("path7-bar-fill");
+    var cap = document.getElementById("path7-bar-caption");
+    if (!fills || !cap) return;
+    state.path7Checks = normalizePath7Checks(state.path7Checks);
+    var n = 0;
+    for (var j = 0; j < 7; j++) {
+      if (state.path7Checks[j]) n += 1;
+    }
+    fills.style.width = Math.round((n / 7) * 100) + "%";
+    cap.textContent = n + " из 7 шагов отмечено";
+  }
+
+  function renderPath7(active, daysSince) {
+    var section = document.getElementById("path7-section");
+    if (!section) return;
+    if (!active) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+    state.path7Checks = normalizePath7Checks(state.path7Checks);
+    var inputs = section.querySelectorAll(".path7-day__check");
+    for (var i = 0; i < inputs.length; i++) {
+      var inp = inputs[i];
+      var idx = parseInt(inp.getAttribute("data-day-idx"), 10);
+      if (isNaN(idx) || idx < 0 || idx > 6) continue;
+      var unlocked = daysSince >= idx;
+      inp.disabled = !unlocked;
+      inp.checked = !!state.path7Checks[idx] && unlocked;
+      var li = inp.closest(".path7-day");
+      if (li) {
+        li.classList.toggle("path7-day--locked", !unlocked);
+        li.classList.toggle("path7-day--done", unlocked && !!state.path7Checks[idx]);
+      }
+    }
+    updatePath7Bar();
+  }
+
   function renderProgress() {
     var empty = document.getElementById("progress-empty");
     var stats = document.getElementById("progress-stats");
     var savingsCard = document.getElementById("savings-card");
+    var path7Section = document.getElementById("path7-section");
     var hasQuit = state.quitTimestamp != null;
     var hasSurvey = !!state.survey;
+    var days = 0;
+    if (hasQuit && hasSurvey) {
+      var quit = new Date(state.quitTimestamp);
+      var now = new Date();
+      days = Math.max(0, Math.floor((now.getTime() - quit.getTime()) / 86400000));
+    }
 
     if (!hasQuit || !hasSurvey) {
       empty.hidden = false;
       stats.hidden = true;
       savingsCard.hidden = true;
+      if (path7Section) path7Section.hidden = true;
     } else {
       empty.hidden = true;
       stats.hidden = false;
       savingsCard.hidden = false;
-      var quit = new Date(state.quitTimestamp);
-      var now = new Date();
-      var diffMs = now.getTime() - quit.getTime();
-      var days = Math.max(0, Math.floor(diffMs / 86400000));
       var m = surveyMoneyParams(state.survey);
       var notSmoked = Math.round(days * m.cigsPerDay);
       var totalSaved = Math.round(notSmoked * m.perCig);
@@ -252,9 +305,36 @@
       document.getElementById("savings-year").textContent = formatMoney(m.perYear);
     }
 
+    renderPath7(hasQuit && hasSurvey, days);
+
     var pi = dayIndex() % phrases.length;
     document.getElementById("phrase-day").textContent = phrases[pi];
     document.getElementById("achievement-day").textContent = achievements[pi % achievements.length];
+  }
+
+  var path7SectionBind = document.getElementById("path7-section");
+  if (path7SectionBind && !path7SectionBind.dataset.path7Bound) {
+    path7SectionBind.dataset.path7Bound = "1";
+    path7SectionBind.addEventListener("change", function (e) {
+      var t = e.target;
+      if (!t || t.type !== "checkbox" || !t.classList.contains("path7-day__check")) return;
+      if (!state.quitTimestamp || !state.survey) return;
+      var idx = parseInt(t.getAttribute("data-day-idx"), 10);
+      if (isNaN(idx) || idx < 0 || idx > 6) return;
+      var quit = new Date(state.quitTimestamp);
+      var now = new Date();
+      var daysSince = Math.max(0, Math.floor((now.getTime() - quit.getTime()) / 86400000));
+      if (daysSince < idx) {
+        t.checked = false;
+        return;
+      }
+      state.path7Checks = normalizePath7Checks(state.path7Checks);
+      state.path7Checks[idx] = t.checked;
+      saveState(state);
+      var li = t.closest(".path7-day");
+      if (li) li.classList.toggle("path7-day--done", t.checked);
+      updatePath7Bar();
+    });
   }
 
   function formatMoney(n) {
