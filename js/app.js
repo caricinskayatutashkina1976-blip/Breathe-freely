@@ -58,6 +58,42 @@
     }, 3200);
   }
 
+  var revealObserver = null;
+
+  function refreshRevealObserver() {
+    if (!("IntersectionObserver" in window)) {
+      document.querySelectorAll(".reveal").forEach(function (el) {
+        el.classList.add("reveal--visible");
+      });
+      return;
+    }
+    var active = document.querySelector(".screen:not([hidden])");
+    if (!active) return;
+    var nodes = active.querySelectorAll(":scope > .card, :scope > aside.card, :scope > .home-grid");
+    if (revealObserver) revealObserver.disconnect();
+    revealObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.classList.add("reveal--visible");
+            revealObserver.unobserve(en.target);
+          }
+        });
+      },
+      { root: null, threshold: 0.06, rootMargin: "0px 0px -8% 0px" }
+    );
+    nodes.forEach(function (el) {
+      el.classList.add("reveal");
+      var r = el.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      if (r.top < vh * 0.92 && r.bottom > -24) {
+        el.classList.add("reveal--visible");
+      } else {
+        revealObserver.observe(el);
+      }
+    });
+  }
+
   var navStack = ["home"];
   var currentScreen = "home";
 
@@ -87,6 +123,9 @@
     if (name === "progress") renderProgress();
     if (name === "survey") hydrateSurvey();
     if (name === "sos") resetSos();
+    requestAnimationFrame(function () {
+      refreshRevealObserver();
+    });
   }
 
   function goBack() {
@@ -97,6 +136,9 @@
       setScreen("home");
       btnBack.hidden = true;
       companionShowForCurrentTime();
+      requestAnimationFrame(function () {
+        refreshRevealObserver();
+      });
       return;
     }
     if (currentScreen === "sos") {
@@ -112,6 +154,9 @@
     if (prev === "progress") renderProgress();
     if (prev === "survey") hydrateSurvey();
     if (prev === "sos") resetSos();
+    requestAnimationFrame(function () {
+      refreshRevealObserver();
+    });
   }
 
   btnBack.addEventListener("click", goBack);
@@ -568,6 +613,9 @@
     setScreen("home");
     btnBack.hidden = true;
     companionShowForCurrentTime();
+    requestAnimationFrame(function () {
+      refreshRevealObserver();
+    });
   }
 
   document.getElementById("btn-start-breath").addEventListener("click", function () {
@@ -672,4 +720,7 @@
   setAiSupportOfTheDay();
   companionShowForCurrentTime();
   renderProgress();
+  requestAnimationFrame(function () {
+    refreshRevealObserver();
+  });
 })();
