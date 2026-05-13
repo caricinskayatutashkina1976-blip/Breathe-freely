@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="Дыши Свободно — мягкая поддержка на пути без сигарет. Не медицинский сервис." />
   <title>Дыши Свободно</title>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem("breatheFreelyTheme") === "night") {
+          document.documentElement.setAttribute("data-theme", "night");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -17,11 +26,22 @@
   <div class="app-bg__dust" aria-hidden="true"></div>
 
   <header class="top-bar" role="banner">
-    <button type="button" class="top-bar__back btn-ghost" id="btn-back" hidden aria-label="Назад">
-      ← Назад
-    </button>
+    <div class="top-bar__start">
+      <button type="button" class="top-bar__back btn-ghost" id="btn-back" hidden aria-label="Назад">
+        ← Назад
+      </button>
+    </div>
     <span class="top-bar__logo">Дыши Свободно</span>
-    <span class="top-bar__spacer" aria-hidden="true"></span>
+    <div class="top-bar__end">
+      <div class="theme-switch" role="group" aria-label="Тема оформления: светлый режим или Night Calm">
+        <button type="button" class="theme-switch__btn is-active" id="btn-theme-light" data-theme-pick="light" aria-pressed="true" title="Светлый режим">
+          День
+        </button>
+        <button type="button" class="theme-switch__btn" id="btn-theme-night" data-theme-pick="night" aria-pressed="false" title="Night Calm Mode">
+          Ночь
+        </button>
+      </div>
+    </div>
   </header>
 
   <main class="main" id="main">

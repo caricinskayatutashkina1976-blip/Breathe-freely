@@ -49,6 +49,59 @@
   var toastEl = document.getElementById("toast");
   var toastTimer;
 
+  var THEME_KEY = "breatheFreelyTheme";
+  var btnThemeLight = document.getElementById("btn-theme-light");
+  var btnThemeNight = document.getElementById("btn-theme-night");
+
+  function updateThemeToggleUi(mode) {
+    var isNight = mode === "night";
+    if (btnThemeLight) {
+      btnThemeLight.classList.toggle("is-active", !isNight);
+      btnThemeLight.setAttribute("aria-pressed", isNight ? "false" : "true");
+    }
+    if (btnThemeNight) {
+      btnThemeNight.classList.toggle("is-active", isNight);
+      btnThemeNight.setAttribute("aria-pressed", isNight ? "true" : "false");
+    }
+  }
+
+  function beginThemeTransition() {
+    var root = document.documentElement;
+    root.classList.remove("theme-transitioning");
+    void root.offsetWidth;
+    root.classList.add("theme-transitioning");
+    clearTimeout(beginThemeTransition._timer);
+    beginThemeTransition._timer = setTimeout(function () {
+      root.classList.remove("theme-transitioning");
+    }, 920);
+  }
+
+  function applyTheme(theme, opts) {
+    opts = opts || {};
+    var next = theme === "night" ? "night" : "light";
+    var prev = document.documentElement.getAttribute("data-theme") || "light";
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem(THEME_KEY, next);
+    } catch (e) {}
+    updateThemeToggleUi(next);
+    if (!opts.skipSupportRefresh) {
+      setAiSupportOfTheDay();
+    }
+    if (!opts.skipTransition && prev !== next) {
+      beginThemeTransition();
+    }
+  }
+
+  function initTheme() {
+    var t = "light";
+    try {
+      if (localStorage.getItem(THEME_KEY) === "night") t = "night";
+    } catch (e) {}
+    document.documentElement.setAttribute("data-theme", t);
+    updateThemeToggleUi(t);
+  }
+
   function showToast(message) {
     toastEl.textContent = message;
     toastEl.hidden = false;
@@ -160,6 +213,17 @@
   }
 
   btnBack.addEventListener("click", goBack);
+
+  if (btnThemeLight) {
+    btnThemeLight.addEventListener("click", function () {
+      applyTheme("light");
+    });
+  }
+  if (btnThemeNight) {
+    btnThemeNight.addEventListener("click", function () {
+      applyTheme("night");
+    });
+  }
 
   /* AI-компаньон: без API, фразы по времени и кнопке */
   var companionMorning = [
@@ -708,14 +772,27 @@
     "Сейчас просто вдохни глубже. Ты уже делаешь шаг."
   ];
 
+  var aiSupportPhrasesNight = [
+    "Сегодня не нужно бороться с собой. Просто позволь себе успокоиться.",
+    "Тревога не вечна. Ночь тоже пройдёт.",
+    "Сейчас важнее не идеальность, а забота о себе.",
+    "Иногда лучший шаг — просто спокойно лечь спать."
+  ];
+
+  function isNightTheme() {
+    return document.documentElement.getAttribute("data-theme") === "night";
+  }
+
   function setAiSupportOfTheDay() {
     var el = document.getElementById("ai-support-quote");
     if (!el) return;
-    var i = Math.floor(Math.random() * aiSupportPhrases.length);
-    el.textContent = aiSupportPhrases[i];
+    var list = isNightTheme() ? aiSupportPhrasesNight : aiSupportPhrases;
+    var i = Math.floor(Math.random() * list.length);
+    el.textContent = list[i];
   }
 
   /* First paint */
+  initTheme();
   setScreen("home");
   setAiSupportOfTheDay();
   companionShowForCurrentTime();
