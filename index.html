@@ -211,7 +211,22 @@
       <div class="card" id="sos-after" hidden>
         <h2 class="h2">Поддержка</h2>
         <blockquote class="support-quote" id="support-text"></blockquote>
-        <div class="mini-task card card--inner" id="mini-task"></div>
+        <div class="sos-followup" id="sos-followup">
+          <p class="sos-followup__label">Что сейчас ближе?</p>
+          <div class="sos-mood" id="sos-mood-chips" role="group" aria-label="Варианты поддержки после дыхания">
+            <button type="button" class="sos-chip" data-mood="coping">Я справляюсь</button>
+            <button type="button" class="sos-chip" data-mood="hard">Мне всё ещё тяжело</button>
+            <button type="button" class="sos-chip" data-mood="distract">Хочу отвлечься</button>
+          </div>
+          <div class="sos-response" id="sos-response-panel" hidden>
+            <p class="sos-response__text" id="sos-response-text"></p>
+            <div class="sos-grounding card card--inner" id="sos-grounding-box" hidden>
+              <p class="sos-grounding__title">Мини-задание</p>
+              <p class="sos-grounding__body" id="sos-grounding-text"></p>
+            </div>
+            <button type="button" class="sos-response__back btn-ghost" id="sos-mood-reset">Выбрать другой вариант</button>
+          </div>
+        </div>
         <button type="button" class="btn btn--primary btn--block" id="btn-urge-less">Тяга стала меньше</button>
         <button type="button" class="btn btn--soft btn--block" id="btn-feel-better">Мне стало легче</button>
         <button type="button" class="btn btn--outline btn--block" data-nav="home">На главную</button>

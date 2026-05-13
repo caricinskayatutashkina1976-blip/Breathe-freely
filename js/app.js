@@ -270,31 +270,34 @@
   var breathTimer = document.getElementById("breath-timer");
   var breathHint = document.getElementById("breath-hint");
   var supportText = document.getElementById("support-text");
-  var miniTask = document.getElementById("mini-task");
+  var sosMoodChips = document.getElementById("sos-mood-chips");
+  var sosResponsePanel = document.getElementById("sos-response-panel");
+  var sosResponseText = document.getElementById("sos-response-text");
+  var sosGroundingBox = document.getElementById("sos-grounding-box");
+  var sosGroundingText = document.getElementById("sos-grounding-text");
+  var sosMoodReset = document.getElementById("sos-mood-reset");
 
   var breathInterval;
   var breathRemaining = 60;
   var BREATH_SEGMENT_SEC = 5;
   var SOS_VICTORY_TEXT = "Ты прошёл одну волну тяги. Это уже победа.";
 
-  var tasks = [
-    {
-      title: "Мини-задание",
-      body: "Назови вслух три предмета рядом с собой и их цвет. Это мягко возвращает внимание в настоящее."
-    },
-    {
-      title: "Мини-задание",
-      body: "Выпей стакан воды маленькими глотками. Часто жажду путают с тягой — это нормально."
-    },
-    {
-      title: "Мини-задание",
-      body: "Напиши одному человеку короткое «привет» без темы сигарет — социальная связь снижает зуд скуки."
-    },
-    {
-      title: "Мини-задание",
-      body: "Сделай 20 шагов по комнате или коридору. Движение помогает переждать пик тяги."
-    }
-  ];
+  var SOS_MOOD_REPLY_COPING =
+    "Ты прошёл волну тяги. Запомни это ощущение: ты можешь выдерживать больше, чем кажется.";
+  var SOS_MOOD_REPLY_HARD =
+    "Это нормально. Тяга не исчезает мгновенно. Давай сделаем ещё один маленький шаг: выпей воды, умойся или выйди на 2 минуты подышать.";
+  var SOS_GROUNDING_54321 =
+    "Назови 5 предметов вокруг себя, 4 звука, которые слышишь, 3 ощущения в теле, 2 цвета и 1 мысль, за которую можно себя поддержать.";
+
+  function resetSosMoodUi() {
+    if (!sosMoodChips || !sosResponsePanel || !sosResponseText) return;
+    sosMoodChips.hidden = false;
+    sosResponsePanel.hidden = true;
+    sosResponseText.hidden = false;
+    sosResponseText.textContent = "";
+    if (sosGroundingBox) sosGroundingBox.hidden = true;
+    if (sosGroundingText) sosGroundingText.textContent = SOS_GROUNDING_54321;
+  }
 
   function resetSos() {
     clearInterval(breathInterval);
@@ -305,6 +308,7 @@
     breathRing.className = "breath-ring";
     breathPhase.textContent = "Вдох";
     breathTimer.textContent = "60";
+    resetSosMoodUi();
   }
 
   function getBreathPhase(secLeft) {
@@ -336,17 +340,7 @@
     sosBreath.hidden = true;
     sosAfter.hidden = false;
     supportText.textContent = SOS_VICTORY_TEXT;
-    var ti = Math.floor(Math.random() * tasks.length);
-    var t = tasks[ti];
-    miniTask.innerHTML = "<strong>" + escapeHtml(t.title) + "</strong>" + escapeHtml(t.body);
-  }
-
-  function escapeHtml(s) {
-    return s
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+    resetSosMoodUi();
   }
 
   function leaveSosToHome(toastMessage) {
@@ -385,6 +379,35 @@
   document.getElementById("btn-feel-better").addEventListener("click", function () {
     leaveSosToHome("Приятно слышать, что стало легче. Один шаг за другим.");
   });
+
+  document.querySelectorAll("#sos-mood-chips .sos-chip").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      var mood = chip.getAttribute("data-mood");
+      if (!mood || !sosResponsePanel || !sosResponseText) return;
+      sosMoodChips.hidden = true;
+      sosResponsePanel.hidden = false;
+      if (mood === "coping") {
+        sosResponseText.hidden = false;
+        sosResponseText.textContent = SOS_MOOD_REPLY_COPING;
+        if (sosGroundingBox) sosGroundingBox.hidden = true;
+      } else if (mood === "hard") {
+        sosResponseText.hidden = false;
+        sosResponseText.textContent = SOS_MOOD_REPLY_HARD;
+        if (sosGroundingBox) sosGroundingBox.hidden = true;
+      } else if (mood === "distract") {
+        sosResponseText.textContent = "";
+        sosResponseText.hidden = true;
+        if (sosGroundingText) sosGroundingText.textContent = SOS_GROUNDING_54321;
+        if (sosGroundingBox) sosGroundingBox.hidden = false;
+      }
+    });
+  });
+
+  if (sosMoodReset) {
+    sosMoodReset.addEventListener("click", function () {
+      resetSosMoodUi();
+    });
+  }
 
   /* Audio cards */
   var audioTitles = {

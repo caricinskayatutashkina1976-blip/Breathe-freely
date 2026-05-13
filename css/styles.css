@@ -785,6 +785,98 @@ body {
   margin-top: 0.65rem;
 }
 
+.sos-followup {
+  margin-bottom: 1rem;
+}
+
+.sos-followup__label {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.sos-mood {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.sos-chip {
+  width: 100%;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  border: 2px solid rgba(124, 184, 154, 0.38);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text);
+  box-shadow: 0 2px 12px rgba(46, 90, 72, 0.06);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+
+.sos-chip:hover {
+  background: rgba(238, 245, 241, 0.96);
+  border-color: var(--mint-deep);
+}
+
+.sos-chip:active {
+  transform: scale(0.99);
+}
+
+.sos-response {
+  margin-top: 0.35rem;
+  padding: 1rem 1rem 0.35rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(247, 250, 248, 0.98), rgba(255, 255, 255, 0.92));
+  border: 1px solid rgba(124, 184, 154, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.sos-response__text {
+  margin: 0 0 0.85rem;
+  font-size: 0.98rem;
+  line-height: 1.58;
+  font-weight: 500;
+  color: #334942;
+}
+
+.sos-response__text:empty {
+  display: none;
+}
+
+.sos-grounding {
+  margin-bottom: 0.65rem;
+}
+
+.sos-grounding__title {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--sky-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.sos-grounding__body {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.sos-response__back {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.15rem;
+  padding: 0.45rem;
+}
+
 .support-quote {
   margin: 0 0 1rem;
   padding: 1rem 1rem 1rem 1.1rem;
