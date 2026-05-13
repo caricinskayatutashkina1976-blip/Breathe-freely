@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Дыши Свободно — мягкая поддержка на пути без сигарет. Не медицинский сервис." />
+  <title>Дыши Свободно</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-bg" aria-hidden="true"></div>
+
+  <header class="top-bar" role="banner">
+    <button type="button" class="top-bar__back btn-ghost" id="btn-back" hidden aria-label="Назад">
+      ← Назад
+    </button>
+    <span class="top-bar__logo">Дыши Свободно</span>
+    <span class="top-bar__spacer" aria-hidden="true"></span>
+  </header>
+
+  <main class="main" id="main">
+    <!-- 1. Главный экран -->
+    <section class="screen screen--active" id="screen-home" data-screen="home" aria-label="Главная">
+      <div class="hero card card--hero">
+        <p class="eyebrow">Мягкая поддержка без давления</p>
+        <h1 class="hero__title">Бросить курить легче, когда ты не один</h1>
+        <p class="hero__lead">
+          Дыши Свободно — AI-помощник, который поддерживает в моменты тяги, помогает понять привычку
+          и шаг за шагом идти к свободе.
+        </p>
+        <p class="hero__note">
+          Это не медицинский сервис и не замена консультации специалиста. Мы сопровождаем и снижаем напряжение в повседневных ситуациях.
+        </p>
+        <div class="hero__actions">
+          <button type="button" class="btn btn--primary" data-nav="survey">Начать путь</button>
+          <button type="button" class="btn btn--accent" data-nav="sos">Меня тянет закурить</button>
+          <button type="button" class="btn btn--outline" data-nav="audio">Послушать аудио</button>
+        </div>
+      </div>
+      <div class="home-grid">
+        <button type="button" class="card card--link" data-nav="progress">
+          <span class="card--link__title">Мой прогресс</span>
+          <span class="card--link__sub">Дни, сэкономленное, фраза дня</span>
+        </button>
+        <button type="button" class="card card--link" data-nav="survey">
+          <span class="card--link__title">Анкета</span>
+          <span class="card--link__sub">Чтобы советы были ближе к тебе</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. Анкета -->
+    <section class="screen" id="screen-survey" data-screen="survey" aria-label="Анкета" hidden>
+      <div class="card">
+        <h2 class="h2">Несколько вопросов — без оценки</h2>
+        <p class="muted">Ответы хранятся только на этом устройстве. Можно изменить в любой момент.</p>
+        <form id="form-survey" class="form">
+          <label class="field">
+            <span class="field__label">Сколько сигарет в день (в среднем)?</span>
+            <input name="cigsPerDay" type="number" min="0" max="120" step="1" required placeholder="например, 10" />
+          </label>
+          <label class="field">
+            <span class="field__label">Сколько лет куришь?</span>
+            <input name="yearsSmoking" type="number" min="0" max="80" step="0.5" required placeholder="например, 5" />
+          </label>
+          <label class="field">
+            <span class="field__label">Когда чаще всего тянет?</span>
+            <select name="urgeMoment" required>
+              <option value="" disabled selected>Выбери вариант</option>
+              <option>Утром с кофе</option>
+              <option>После еды</option>
+              <option>Во время перерыва на работе</option>
+              <option>Вечером, перед сном</option>
+              <option>В стрессовые моменты</option>
+              <option>В компании, «за компанию»</option>
+              <option>В дороге / в ожидании</option>
+              <option>Другое / по-разному</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field__label">Почему хочешь бросить?</span>
+            <textarea name="whyQuit" rows="3" required placeholder="Коротко, как тебе комфортно"></textarea>
+          </label>
+          <fieldset class="field field--fieldset">
+            <legend class="field__label">Что сейчас больше пугает?</legend>
+            <div class="radio-list">
+              <label class="radio"><input type="radio" name="fear" value="stress" required /> Стресс</label>
+              <label class="radio"><input type="radio" name="fear" value="relapse" /> Срыв</label>
+              <label class="radio"><input type="radio" name="fear" value="weight" /> Набор веса</label>
+              <label class="radio"><input type="radio" name="fear" value="habit" /> Сама привычка / «на автомате»</label>
+            </div>
+          </fieldset>
+          <label class="field field--inline">
+            <input type="checkbox" name="startToday" id="start-today" checked />
+            <span>Считать прогресс с сегодняшнего дня (как день без сигарет)</span>
+          </label>
+          <button type="submit" class="btn btn--primary btn--block">Сохранить и продолжить</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 3. SOS -->
+    <section class="screen" id="screen-sos" data-screen="sos" aria-label="Сейчас тянет" hidden>
+      <div class="card sos-intro" id="sos-intro">
+        <h2 class="h2">Ты здесь — уже шаг к заботе о себе</h2>
+        <p class="muted">Сейчас мы мягко снизим напряжение: дыхание, слова поддержки и маленькое действие. Без давления и без обещаний «лечить».</p>
+        <button type="button" class="btn btn--primary btn--block" id="btn-start-breath">Начать 60 секунд дыхания</button>
+      </div>
+
+      <div class="card sos-breath" id="sos-breath" hidden>
+        <p class="eyebrow">Дыхательная пауза</p>
+        <div class="breath-ring" id="breath-ring" aria-live="polite">
+          <span class="breath-ring__phase" id="breath-phase">Готовимся…</span>
+          <span class="breath-ring__timer" id="breath-timer">60</span>
+        </div>
+        <p class="muted breath-hint" id="breath-hint">Сядь удобнее. Плечи мягко опусти.</p>
+        <button type="button" class="btn btn--ghost btn--block" id="btn-skip-breath">Пропустить дыхание</button>
+      </div>
+
+      <div class="card" id="sos-after" hidden>
+        <h2 class="h2">Поддержка</h2>
+        <blockquote class="support-quote" id="support-text"></blockquote>
+        <div class="mini-task card card--inner" id="mini-task"></div>
+        <button type="button" class="btn btn--primary btn--block" id="btn-urge-less">Тяга стала меньше</button>
+        <button type="button" class="btn btn--outline btn--block" data-nav="home">На главную</button>
+      </div>
+    </section>
+
+    <!-- 4. Прогресс -->
+    <section class="screen" id="screen-progress" data-screen="progress" aria-label="Прогресс" hidden>
+      <div class="card">
+        <h2 class="h2">Твой прогресс</h2>
+        <p class="muted" id="progress-empty" hidden>Заполни анкету и отметь старт — тогда появятся цифры. Это ориентиры, не медицинские показатели.</p>
+        <div class="stats" id="progress-stats" hidden>
+          <div class="stat card card--stat">
+            <span class="stat__value" id="stat-days">0</span>
+            <span class="stat__label">дней без сигарет</span>
+          </div>
+          <div class="stat card card--stat">
+            <span class="stat__value" id="stat-not-smoked">0</span>
+            <span class="stat__label">сигарет не выкурено (оценка)</span>
+          </div>
+          <div class="stat card card--stat">
+            <span class="stat__value" id="stat-money">0 ₽</span>
+            <span class="stat__label">примерно сэкономлено</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="h3">Фраза дня</h3>
+        <p class="phrase" id="phrase-day"></p>
+      </div>
+      <div class="card">
+        <h3 class="h3">Достижение дня</h3>
+        <p class="achievement" id="achievement-day"></p>
+      </div>
+      <button type="button" class="btn btn--outline btn--block" data-nav="survey">Изменить анкету</button>
+    </section>
+
+    <!-- 5. Аудио -->
+    <section class="screen" id="screen-audio" data-screen="audio" aria-label="Аудио" hidden>
+      <div class="card">
+        <h2 class="h2">Аудио-поддержка</h2>
+        <p class="muted">Короткие практики для спокойствия. В MVP — демо-кнопки; в полной версии здесь будут треки.</p>
+      </div>
+      <div class="audio-grid">
+        <article class="card audio-card" data-audio="urge">
+          <div class="audio-card__icon" aria-hidden="true">▶</div>
+          <h3 class="audio-card__title">5 минут против тяги</h3>
+          <p class="audio-card__sub">Мягко переключить внимание</p>
+        </article>
+        <article class="card audio-card" data-audio="evening">
+          <div class="audio-card__icon" aria-hidden="true">▶</div>
+          <h3 class="audio-card__title">Вечернее расслабление</h3>
+          <p class="audio-card__sub">Снять лишнее напряжение</p>
+        </article>
+        <article class="card audio-card" data-audio="morning">
+          <div class="audio-card__icon" aria-hidden="true">▶</div>
+          <h3 class="audio-card__title">Утренний настрой</h3>
+          <p class="audio-card__sub">Спокойный старт дня</p>
+        </article>
+        <article class="card audio-card" data-audio="stress">
+          <div class="audio-card__icon" aria-hidden="true">▶</div>
+          <h3 class="audio-card__title">Антистресс</h3>
+          <p class="audio-card__sub">Вернуться в тело и дыхание</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
