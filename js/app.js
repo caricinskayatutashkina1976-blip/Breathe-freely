@@ -81,6 +81,9 @@
     }
     currentScreen = name;
     setScreen(name);
+    if (name === "home") {
+      companionShowForCurrentTime();
+    }
     if (name === "progress") renderProgress();
     if (name === "survey") hydrateSurvey();
     if (name === "sos") resetSos();
@@ -93,6 +96,7 @@
       navStack = ["home"];
       setScreen("home");
       btnBack.hidden = true;
+      companionShowForCurrentTime();
       return;
     }
     if (currentScreen === "sos") {
@@ -102,6 +106,9 @@
     var prev = navStack[navStack.length - 1] || "home";
     currentScreen = prev;
     setScreen(prev);
+    if (prev === "home") {
+      companionShowForCurrentTime();
+    }
     if (prev === "progress") renderProgress();
     if (prev === "survey") hydrateSurvey();
     if (prev === "sos") resetSos();
@@ -109,9 +116,139 @@
 
   btnBack.addEventListener("click", goBack);
 
+  /* AI-компаньон: без API, фразы по времени и кнопке */
+  var companionMorning = [
+    "Свобода начинается не с запрета, а с заботы о себе.",
+    "Сегодняшний маленький шаг важнее идеального результата.",
+    "Утро не ставит тебе экзамен — оно просто приходит. Можно встретить его мягко.",
+    "Не нужно решать всё сразу. Достаточно одного спокойного выбора в свою пользу.",
+    "Тело просыпается не одним дыханием — дай ему воду и несколько медленных вдохов.",
+    "Вчера уже позади. Сегодня — страница без оценок, только забота.",
+    "Ты имеешь право начинать сколько угодно раз — без стыда и без объяснений.",
+    "Солнце в окне или нет — ты всё равно достоин(а) тишины внутри."
+  ];
+
+  var companionAfternoon = [
+    "Организм уже начинает благодарить тебя.",
+    "История с сигаретой не определяет весь день — только несколько минут.",
+    "Между «хочу» и «сделаю» есть щель. В ней можно просто побыть.",
+    "Перекур не обязан быть отдыхом. Отдых можно найти и без него.",
+    "Ты учишься новому ритму — у любого обучения бывают паузы.",
+    "Одно «постой» перед действием уже меняет привычку изнутри.",
+    "Усталость и тяга часто похожи — тело можно напоить и снять спешку.",
+    "Небольшая прогулка иногда заменяет целый внутренний спор."
+  ];
+
+  var companionEvening = [
+    "Сделай медленный вдох. Напряжение пройдёт быстрее, чем кажется.",
+    "Вечер — время отпустить суету, а не собирать к ней ещё доказательства.",
+    "Ты сделал(а) уже достаточно для этого дня. Остальное может подождать до завтра.",
+    "Дыхание потише — и мысли становятся ближе и спокойнее.",
+    "Если день был сложным, ты всё равно в нём выжил(а). Это не мелочь.",
+    "Позволь себе режим «без улучшений», просто «я рядом с собой».",
+    "Завтрашний ты поблагодарит сегодняшнего за нежность, а не за подвиги.",
+    "Тьма за окном не про тебя — про время суток. Свет внутри можно не гасить."
+  ];
+
+  var companionUrge = [
+    "Тяга всегда временная. Она сильнее в моменте, чем в реальности.",
+    "Сейчас тебе не нужно бросать навсегда. Только не курить ближайшие 10 минут.",
+    "Ты не слабый. Ты просто много лет жил с привычкой.",
+    "Иногда мозг путает тревогу с потребностью в сигарете.",
+    "Ты уже меняешь сценарий своей жизни.",
+    "Даже если был срыв — путь не потерян.",
+    "Это не приказ мозга — это сигнал «мне тревожно». На него можно ответить теплом, а не дымом.",
+    "Подожди чуть-чуть: волна сама устанет, если её не кормить импульсом.",
+    "Ты не обязан(а) быть стальным(ой). Мягкость тоже сила.",
+    "Прямо сейчас можно сесть и тихо назвать себя по имени — не по делам и ошибкам."
+  ];
+
+  var lastCompanionPhrase = "";
+  var companionAllFlat = companionMorning.concat(companionAfternoon, companionEvening, companionUrge);
+
+  function companionPickDifferent(pool) {
+    if (!pool || !pool.length) return "";
+    var x = pool[Math.floor(Math.random() * pool.length)];
+    var guard = 0;
+    while (x === lastCompanionPhrase && pool.length > 1 && guard < 24) {
+      x = pool[Math.floor(Math.random() * pool.length)];
+      guard += 1;
+    }
+    return x;
+  }
+
+  function companionSetMessage(phrase) {
+    var el = document.getElementById("companion-message");
+    var card = document.getElementById("companion-block");
+    if (!el) return;
+    lastCompanionPhrase = phrase;
+    if (!el.textContent || !el.textContent.trim()) {
+      el.textContent = phrase;
+      return;
+    }
+    el.classList.add("companion__message--swap");
+    if (card) card.classList.add("companion--refresh");
+    window.setTimeout(function () {
+      el.textContent = phrase;
+      el.classList.remove("companion__message--swap");
+      if (card) card.classList.remove("companion--refresh");
+    }, 220);
+  }
+
+  function companionShowForCurrentTime() {
+    var ctx = document.getElementById("companion-context");
+    var h = new Date().getHours();
+    var pool;
+    var label;
+    if (h >= 5 && h < 12) {
+      pool = companionMorning;
+      label = "Утро — мягкая поддержка";
+    } else if (h >= 12 && h < 17) {
+      pool = companionAfternoon;
+      label = "День — спокойное сопровождение";
+    } else if (h >= 17 && h < 22) {
+      pool = companionEvening;
+      label = "Вечер — можно выдохнуть";
+    } else {
+      pool = companionEvening.concat(companionUrge);
+      label = "Ночь — рядом с собой";
+    }
+    if (ctx) ctx.textContent = label;
+    companionSetMessage(companionPickDifferent(pool));
+  }
+
+  function companionRefreshWithTyping() {
+    var typing = document.getElementById("companion-typing");
+    var ctx = document.getElementById("companion-context");
+    var wrap = document.getElementById("companion-message-wrap");
+    if (ctx) ctx.textContent = "Момент тяги — на одной волне с тобой";
+    if (wrap) wrap.setAttribute("aria-busy", "true");
+    if (typing) typing.hidden = false;
+    window.setTimeout(function () {
+      if (typing) typing.hidden = true;
+      if (wrap) wrap.setAttribute("aria-busy", "false");
+      var roll = Math.random();
+      var pool = roll < 0.38 ? companionUrge : companionAllFlat;
+      companionSetMessage(companionPickDifferent(pool));
+    }, 520);
+  }
+
+  var companionBtn = document.getElementById("companion-refresh");
+  if (companionBtn) {
+    companionBtn.addEventListener("click", function () {
+      companionRefreshWithTyping();
+    });
+  }
+
   document.querySelectorAll("[data-nav]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var target = btn.getAttribute("data-nav");
+      var homeEl = document.getElementById("screen-home");
+      if (homeEl && homeEl.contains(btn) && currentScreen === "home") {
+        var ctxNav = document.getElementById("companion-context");
+        if (ctxNav) ctxNav.textContent = "Перед шагом — мягкое напоминание";
+        companionSetMessage(companionPickDifferent(companionUrge));
+      }
       navigate(target);
     });
   });
@@ -430,6 +567,7 @@
     resetSos();
     setScreen("home");
     btnBack.hidden = true;
+    companionShowForCurrentTime();
   }
 
   document.getElementById("btn-start-breath").addEventListener("click", function () {
@@ -532,5 +670,6 @@
   /* First paint */
   setScreen("home");
   setAiSupportOfTheDay();
+  companionShowForCurrentTime();
   renderProgress();
 })();

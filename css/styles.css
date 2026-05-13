@@ -373,6 +373,215 @@ body {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
+/* AI-компаньон (без API) */
+.companion {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(107, 163, 192, 0.22);
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.98) 0%, rgba(241, 248, 252, 0.95) 55%, rgba(248, 252, 249, 0.96) 100%);
+  box-shadow: 0 12px 40px rgba(46, 90, 72, 0.08);
+}
+
+.companion__aura {
+  position: absolute;
+  inset: -30% -20% auto -20%;
+  height: 55%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 70% at 20% 0%, rgba(184, 217, 232, 0.45), transparent 60%),
+    radial-gradient(ellipse 45% 60% at 90% 10%, rgba(200, 230, 213, 0.4), transparent 55%);
+  opacity: 0.95;
+}
+
+.companion__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.companion__top {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+.companion__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: linear-gradient(145deg, rgba(200, 230, 213, 0.65), rgba(184, 217, 232, 0.55));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 6px 18px rgba(77, 139, 171, 0.15);
+}
+
+.companion__avatar span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0.45;
+  animation: companionDot 1.4s ease-in-out infinite;
+}
+
+.companion__avatar span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.companion__avatar span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes companionDot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .companion__avatar span {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
+.companion__context {
+  margin: 0 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #5a8f7a;
+}
+
+.companion__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.companion__meta {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 34rem;
+}
+
+.companion__message-wrap {
+  position: relative;
+  min-height: 4.5rem;
+  margin-bottom: 1rem;
+}
+
+.companion__typing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.companion__typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mint-deep);
+  opacity: 0.45;
+  animation: companionTyping 0.9s ease-in-out infinite;
+}
+
+.companion__typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.companion__typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes companionTyping {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .companion__typing span {
+    animation: none;
+    opacity: 0.65;
+  }
+}
+
+.companion__message {
+  margin: 0;
+  padding: 1rem 1.05rem;
+  font-size: clamp(0.95rem, 3.1vw, 1.04rem);
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.58;
+  color: #2f4540;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(124, 184, 154, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.companion__message--swap {
+  opacity: 0.18;
+  transform: translateY(6px);
+}
+
+.companion--refresh {
+  animation: companionCardGlow 0.65s ease;
+}
+
+@keyframes companionCardGlow {
+  0% {
+    box-shadow: 0 12px 40px rgba(46, 90, 72, 0.08);
+  }
+  40% {
+    box-shadow: 0 14px 48px rgba(90, 157, 122, 0.18);
+  }
+  100% {
+    box-shadow: 0 12px 40px rgba(46, 90, 72, 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .companion--refresh {
+    animation: none;
+  }
+
+  .companion__message {
+    transition-duration: 0.12s;
+  }
+}
+
+.companion__btn {
+  width: 100%;
+}
+
 /* Как восстанавливается организм */
 .recovery {
   position: relative;
