@@ -23,23 +23,97 @@
 
   <main class="main" id="main">
     <!-- 1. Главный экран -->
-    <section class="screen screen--active" id="screen-home" data-screen="home" aria-label="Главная">
-      <div class="hero card card--hero">
-        <p class="eyebrow">Мягкая поддержка без давления</p>
-        <h1 class="hero__title">Бросить курить легче, когда ты не один</h1>
-        <p class="hero__lead">
-          Дыши Свободно — AI-помощник, который поддерживает в моменты тяги, помогает понять привычку
-          и шаг за шагом идти к свободе.
-        </p>
-        <p class="hero__note">
-          Это не медицинский сервис и не замена консультации специалиста. Мы сопровождаем и снижаем напряжение в повседневных ситуациях.
-        </p>
-        <div class="hero__actions">
-          <button type="button" class="btn btn--primary" data-nav="survey">Начать путь</button>
-          <button type="button" class="btn btn--accent" data-nav="sos">Меня тянет закурить</button>
-          <button type="button" class="btn btn--outline" data-nav="audio">Послушать аудио</button>
+    <section class="screen screen--active screen--home" id="screen-home" data-screen="home" aria-label="Главная">
+      <div class="hero card card--hero card--hero-home">
+        <div class="hero__atmosphere" aria-hidden="true"></div>
+        <div class="hero__inner">
+          <p class="eyebrow eyebrow--home">Рядом, когда внутри шумно</p>
+          <h1 class="hero__title hero__title--home">Свобода начинается с одного спокойного вдоха</h1>
+          <p class="hero__lead hero__lead--home">
+            Breathe Freely — мягкий AI-помощник, который поддерживает в моменты тяги, помогает справляться со стрессом
+            и шаг за шагом идти к жизни без сигарет.
+          </p>
+          <p class="hero__emotion">
+            Не нужно быть идеальным. Достаточно сделать следующий вдох без сигареты.
+          </p>
+          <p class="hero__note hero__note--home">
+            Это не медицинский сервис и не замена консультации специалиста. Мы сопровождаем и снижаем напряжение в повседневных ситуациях.
+          </p>
+          <div class="hero__actions hero__actions--home">
+            <button type="button" class="btn btn--primary" data-nav="survey">Начать путь</button>
+            <button type="button" class="btn btn--accent" data-nav="sos">Меня тянет закурить</button>
+            <button type="button" class="btn btn--outline" data-nav="audio">Послушать аудио</button>
+          </div>
         </div>
       </div>
+      <aside class="card ai-support" aria-labelledby="ai-support-heading">
+        <div class="ai-support__decor" aria-hidden="true"></div>
+        <div class="ai-support__inner">
+          <p class="ai-support__eyebrow">Мягкие напоминания</p>
+          <h2 class="ai-support__title" id="ai-support-heading">AI поддержка дня</h2>
+          <p class="ai-support__meta">Пока без настоящего AI — одна из пяти готовых фраз при каждом открытии страницы.</p>
+          <blockquote class="ai-support__quote" id="ai-support-quote">Тяга — это волна. Она поднимается, но обязательно проходит.</blockquote>
+        </div>
+      </aside>
+      <section class="recovery card" aria-labelledby="recovery-heading">
+        <div class="recovery__head">
+          <p class="recovery__eyebrow">Нежный ориентир во времени</p>
+          <h2 class="recovery__title" id="recovery-heading">Как восстанавливается организм</h2>
+          <p class="recovery__intro">
+            Ниже — мягкие, обобщённые ориентиры: у всех всё может идти по-своему. Это не медицинский совет и не гарантия «как будет именно у тебя» — только спокойная поддержка любопытства к своему телу.
+          </p>
+        </div>
+        <ol class="recovery__stages">
+          <li class="recovery-stage">
+            <span class="recovery-stage__badge" aria-hidden="true">20 мин</span>
+            <div class="recovery-stage__body">
+              <h3 class="recovery-stage__label">Через 20 минут</h3>
+              <p class="recovery-stage__text">
+                Пульс и давление могут постепенно возвращаться к более спокойному уровню.
+              </p>
+            </div>
+          </li>
+          <li class="recovery-stage">
+            <span class="recovery-stage__badge" aria-hidden="true">8 ч</span>
+            <div class="recovery-stage__body">
+              <h3 class="recovery-stage__label">Через 8 часов</h3>
+              <p class="recovery-stage__text">Уровень кислорода в крови может постепенно улучшаться.</p>
+            </div>
+          </li>
+          <li class="recovery-stage">
+            <span class="recovery-stage__badge" aria-hidden="true">24 ч</span>
+            <div class="recovery-stage__body">
+              <h3 class="recovery-stage__label">Через 24 часа</h3>
+              <p class="recovery-stage__text">
+                Организм может начинать активнее очищаться от последствий курения — мягко и постепенно.
+              </p>
+            </div>
+          </li>
+          <li class="recovery-stage">
+            <span class="recovery-stage__badge" aria-hidden="true">3 дня</span>
+            <div class="recovery-stage__body">
+              <h3 class="recovery-stage__label">Через 3 дня</h3>
+              <p class="recovery-stage__text">Дыхание может становиться легче.</p>
+            </div>
+          </li>
+          <li class="recovery-stage">
+            <span class="recovery-stage__badge" aria-hidden="true">2 нед</span>
+            <div class="recovery-stage__body">
+              <h3 class="recovery-stage__label">Через 2 недели</h3>
+              <p class="recovery-stage__text">Выносливость может постепенно расти.</p>
+            </div>
+          </li>
+          <li class="recovery-stage">
+            <span class="recovery-stage__badge" aria-hidden="true">1 мес</span>
+            <div class="recovery-stage__body">
+              <h3 class="recovery-stage__label">Через 1 месяц</h3>
+              <p class="recovery-stage__text">
+                Человек часто замечает больше энергии и контроля.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
       <div class="home-grid">
         <button type="button" class="card card--link" data-nav="progress">
           <span class="card--link__title">Мой прогресс</span>
@@ -122,9 +196,13 @@
 
       <div class="card sos-breath" id="sos-breath" hidden>
         <p class="eyebrow">Дыхательная пауза</p>
+        <p class="muted sos-breath__hint-top">60 секунд: круг плавно расширяется на вдохе и сужается на выдохе. Лови свой ритм.</p>
         <div class="breath-ring" id="breath-ring" aria-live="polite">
-          <span class="breath-ring__phase" id="breath-phase">Готовимся…</span>
-          <span class="breath-ring__timer" id="breath-timer">60</span>
+          <div class="breath-ring__disc" aria-hidden="true"></div>
+          <div class="breath-ring__content">
+            <span class="breath-ring__phase" id="breath-phase">Вдох</span>
+            <span class="breath-ring__timer" id="breath-timer">60</span>
+          </div>
         </div>
         <p class="muted breath-hint" id="breath-hint">Сядь удобнее. Плечи мягко опусти.</p>
         <button type="button" class="btn btn--ghost btn--block" id="btn-skip-breath">Пропустить дыхание</button>
@@ -135,6 +213,7 @@
         <blockquote class="support-quote" id="support-text"></blockquote>
         <div class="mini-task card card--inner" id="mini-task"></div>
         <button type="button" class="btn btn--primary btn--block" id="btn-urge-less">Тяга стала меньше</button>
+        <button type="button" class="btn btn--soft btn--block" id="btn-feel-better">Мне стало легче</button>
         <button type="button" class="btn btn--outline btn--block" data-nav="home">На главную</button>
       </div>
     </section>

@@ -274,12 +274,8 @@
 
   var breathInterval;
   var breathRemaining = 60;
-
-  var supportPool = [
-    "Тяга не команда — это сигнал усталости или напряжения. Ты уже делаешь достаточно, просто оставаясь здесь.",
-    "Не нужно «победить» себя. Достаточно дать телу паузу: дыхание уже помогает снизить напряжение.",
-    "Если бы ты хотел(а) сдаться по-настоящему, ты бы не открыл(а) этот экран. Это про заботу, а не про силу воли на крике."
-  ];
+  var BREATH_SEGMENT_SEC = 5;
+  var SOS_VICTORY_TEXT = "Ты прошёл одну волну тяги. Это уже победа.";
 
   var tasks = [
     {
@@ -307,23 +303,31 @@
     sosBreath.hidden = true;
     sosAfter.hidden = true;
     breathRing.className = "breath-ring";
+    breathPhase.textContent = "Вдох";
+    breathTimer.textContent = "60";
   }
 
-  function getPhaseForSecond(secLeft) {
+  function getBreathPhase(secLeft) {
     var elapsed = 60 - secLeft;
-    var cycle = 15;
-    var pos = elapsed % cycle;
-    if (pos < 5) return { phase: "inhale", label: "Медленный вдох", hint: "Носом, на 4 счёта — без рывка." };
-    if (pos < 10) return { phase: "hold", label: "Мягкая задержка", hint: "Плечи опущены, челюсть расслаблена." };
-    return { phase: "exhale", label: "Медленный выдох", hint: "Длиннее, чем вдох. Как тёплый пар." };
+    if (elapsed < 0) elapsed = 0;
+    if (elapsed > 59) elapsed = 59;
+    var seg = Math.floor(elapsed / BREATH_SEGMENT_SEC);
+    var isInhale = seg % 2 === 0;
+    return {
+      phase: isInhale ? "inhale" : "exhale",
+      label: isInhale ? "Вдох" : "Выдох",
+      hint: isInhale
+        ? "Носом, спокойно наполняй грудь и живот."
+        : "Выдохни длиннее, чем вдох. Плечи мягко опускаются вниз."
+    };
   }
 
   function updateBreathUI() {
     breathTimer.textContent = String(breathRemaining);
-    var p = getPhaseForSecond(breathRemaining);
+    var p = getBreathPhase(breathRemaining);
     breathPhase.textContent = p.label;
     breathHint.textContent = p.hint;
-    breathRing.classList.remove("breath-ring--inhale", "breath-ring--hold", "breath-ring--exhale");
+    breathRing.classList.remove("breath-ring--inhale", "breath-ring--exhale");
     breathRing.classList.add("breath-ring--" + p.phase);
   }
 
@@ -331,8 +335,7 @@
     clearInterval(breathInterval);
     sosBreath.hidden = true;
     sosAfter.hidden = false;
-    var si = Math.floor(Math.random() * supportPool.length);
-    supportText.textContent = supportPool[si];
+    supportText.textContent = SOS_VICTORY_TEXT;
     var ti = Math.floor(Math.random() * tasks.length);
     var t = tasks[ti];
     miniTask.innerHTML = "<strong>" + escapeHtml(t.title) + "</strong>" + escapeHtml(t.body);
@@ -344,6 +347,15 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+  function leaveSosToHome(toastMessage) {
+    showToast(toastMessage);
+    currentScreen = "home";
+    navStack = ["home"];
+    resetSos();
+    setScreen("home");
+    btnBack.hidden = true;
   }
 
   document.getElementById("btn-start-breath").addEventListener("click", function () {
@@ -367,12 +379,11 @@
   });
 
   document.getElementById("btn-urge-less").addEventListener("click", function () {
-    showToast("Хорошо. Этот момент засчитан — ты поддержал(а) себя.");
-    currentScreen = "home";
-    navStack = ["home"];
-    resetSos();
-    setScreen("home");
-    btnBack.hidden = true;
+    leaveSosToHome("Хорошо. Этот момент засчитан — ты поддержал(а) себя.");
+  });
+
+  document.getElementById("btn-feel-better").addEventListener("click", function () {
+    leaveSosToHome("Приятно слышать, что стало легче. Один шаг за другим.");
   });
 
   /* Audio cards */
@@ -399,7 +410,24 @@
     card.setAttribute("role", "button");
   });
 
+  /* Поддержка дня на главной: статичные фразы, случайная при загрузке */
+  var aiSupportPhrases = [
+    "Тяга — это волна. Она поднимается, но обязательно проходит.",
+    "Ты не обязан побеждать весь день сразу. Победи ближайшие 5 минут.",
+    "Каждый отказ от сигареты — это голос в пользу твоей свободы.",
+    "Срыв не отменяет путь. Важно не бросить себя.",
+    "Сейчас просто вдохни глубже. Ты уже делаешь шаг."
+  ];
+
+  function setAiSupportOfTheDay() {
+    var el = document.getElementById("ai-support-quote");
+    if (!el) return;
+    var i = Math.floor(Math.random() * aiSupportPhrases.length);
+    el.textContent = aiSupportPhrases[i];
+  }
+
   /* First paint */
   setScreen("home");
+  setAiSupportOfTheDay();
   renderProgress();
 })();
