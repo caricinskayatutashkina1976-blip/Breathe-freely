@@ -791,12 +791,35 @@
     el.textContent = list[i];
   }
 
+  function initBgParallax() {
+    var photo = document.getElementById("app-bg-photo");
+    if (!photo || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var ticking = false;
+    function update() {
+      var y = window.scrollY * 0.2;
+      photo.style.transform = "translate3d(0, " + y + "px, 0) scale(1.08)";
+      ticking = false;
+    }
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+
   /* First paint */
   initTheme();
   setScreen("home");
   setAiSupportOfTheDay();
   companionShowForCurrentTime();
   renderProgress();
+  initBgParallax();
   requestAnimationFrame(function () {
     refreshRevealObserver();
   });
