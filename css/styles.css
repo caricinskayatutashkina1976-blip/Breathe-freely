@@ -34,6 +34,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  min-height: 100%;
+  background-color: #0c1218;
 }
 
 body {
@@ -47,32 +49,38 @@ body {
   transition: color 0.55s var(--ease-out-soft);
 }
 
-/* Глобальная фото-подложка на весь сайт */
+/* Глобальная фото-подложка: фиксирована, не смещается при скролле */
 .app-bg {
   position: fixed;
   inset: 0;
   z-index: -5;
-  overflow: hidden;
   pointer-events: none;
 }
 
 .app-bg__photo {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   background-image: var(--bg-image);
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  transform: scale(1.06);
-  transform-origin: center center;
-  will-change: transform;
+  transform: none;
   animation: bgPhotoBreath 32s ease-in-out infinite alternate;
 }
 
 .app-bg__overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   z-index: 1;
   background: linear-gradient(var(--overlay-start), var(--overlay-end));
   pointer-events: none;
@@ -156,15 +164,6 @@ body {
 
   .app-bg__orb {
     opacity: 0.15;
-  }
-}
-
-@media (max-width: 900px) {
-  .app-bg__photo {
-    background-attachment: scroll;
-    position: absolute;
-    inset: -4%;
-    min-height: 108%;
   }
 }
 
