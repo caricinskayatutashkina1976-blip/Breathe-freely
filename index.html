@@ -442,39 +442,63 @@
       <button type="button" class="btn btn--outline btn--block" data-nav="survey">Изменить анкету</button>
     </section>
 
-    <!-- 5. Аудио -->
-    <section class="screen" id="screen-audio" data-screen="audio" aria-label="Аудио" hidden>
-      <div class="card">
-        <h2 class="h2">Аудио-поддержка</h2>
-        <p class="muted">Короткие практики для спокойствия. В MVP — демо-кнопки; в полной версии здесь будут треки.</p>
+    <!-- 5. Аудиоподдержка -->
+    <section class="screen" id="screen-audio" data-screen="audio" aria-label="Аудиоподдержка" hidden>
+      <div class="card audiosupport-hero">
+        <div class="audiosupport-hero__mist" aria-hidden="true"></div>
+        <div class="audiosupport-hero__inner">
+          <p class="audiosupport-hero__eyebrow">Пространство спокойствия</p>
+          <h2 class="h2 audiosupport-hero__title">🎧 Аудиоподдержка</h2>
+          <p class="audiosupport-hero__lead">Выберите голос, который поможет вам пройти этот момент спокойно.</p>
+        </div>
       </div>
-      <div class="audio-grid">
-        <article class="card audio-card" data-audio="urge">
-          <div class="audio-card__icon" aria-hidden="true">▶</div>
-          <h3 class="audio-card__title">5 минут против тяги</h3>
-          <p class="audio-card__sub">Мягко переключить внимание</p>
+
+      <div class="audiosupport-voices" id="audiosupport-voices" role="group" aria-label="Выбор голоса">
+        <article class="card voice-card" data-voice="female">
+          <div class="voice-card__glow" aria-hidden="true"></div>
+          <div class="voice-card__inner">
+            <p class="voice-card__icon" aria-hidden="true">👩</p>
+            <h3 class="voice-card__title">Женский голос</h3>
+            <p class="voice-card__desc">Тёплый, заботливый, мягкий голос, который сопровождает вас на пути к свободному дыханию.</p>
+            <button type="button" class="btn btn--outline voice-card__btn">Выбрать</button>
+          </div>
         </article>
-        <article class="card audio-card" data-audio="evening">
-          <div class="audio-card__icon" aria-hidden="true">▶</div>
-          <h3 class="audio-card__title">Вечернее расслабление</h3>
-          <p class="audio-card__sub">Снять лишнее напряжение</p>
+        <article class="card voice-card" data-voice="male">
+          <div class="voice-card__glow" aria-hidden="true"></div>
+          <div class="voice-card__inner">
+            <p class="voice-card__icon" aria-hidden="true">👨</p>
+            <h3 class="voice-card__title">Мужской голос</h3>
+            <p class="voice-card__desc">Спокойный, уверенный голос, создающий ощущение безопасности и поддержки.</p>
+            <button type="button" class="btn btn--outline voice-card__btn">Выбрать</button>
+          </div>
         </article>
-        <article class="card audio-card" data-audio="morning">
-          <div class="audio-card__icon" aria-hidden="true">▶</div>
-          <h3 class="audio-card__title">Утренний настрой</h3>
-          <p class="audio-card__sub">Спокойный старт дня</p>
-        </article>
-        <article class="card audio-card" data-audio="stress">
-          <div class="audio-card__icon" aria-hidden="true">▶</div>
-          <h3 class="audio-card__title">Антистресс</h3>
-          <p class="audio-card__sub">Вернуться в тело и дыхание</p>
-        </article>
+      </div>
+
+      <div class="audiosupport-library" id="audiosupport-library" hidden>
+        <div class="card audiosupport-library__head">
+          <p class="audiosupport-library__voice" id="audiosupport-voice-label"></p>
+          <h3 class="audiosupport-library__title">Библиотека аудио</h3>
+          <p class="muted audiosupport-library__sub">Медитации и расслабление — выберите практику под ваш момент.</p>
+        </div>
+        <div class="audiosupport-tracks" id="audiosupport-tracks" aria-live="polite"></div>
+      </div>
+
+      <div class="card audiosupport-complete" id="audiosupport-complete" hidden>
+        <div class="audiosupport-complete__glow" aria-hidden="true"></div>
+        <div class="audiosupport-complete__inner">
+          <p class="audiosupport-complete__icon" aria-hidden="true">✨</p>
+          <h3 class="audiosupport-complete__title">Отличная работа!</h3>
+          <p class="audiosupport-complete__text">Сегодня вы сделали ещё один шаг к свободному дыханию.</p>
+          <button type="button" class="btn btn--primary audiosupport-complete__btn" id="audiosupport-feel-better">❤️ Мне стало легче</button>
+          <p class="audiosupport-complete__after" id="audiosupport-feel-message" hidden>Каждая маленькая победа делает вас сильнее.</p>
+        </div>
       </div>
     </section>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+  <script src="js/audio-support.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

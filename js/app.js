@@ -122,7 +122,9 @@
     }
     var active = document.querySelector(".screen:not([hidden])");
     if (!active) return;
-    var nodes = active.querySelectorAll(":scope > .card, :scope > aside.card, :scope > .home-grid");
+    var nodes = active.querySelectorAll(
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library"
+    );
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(
       function (entries) {
@@ -146,6 +148,8 @@
       }
     });
   }
+
+  window.refreshRevealObserver = refreshRevealObserver;
 
   var navStack = ["home"];
   var currentScreen = "home";
@@ -176,6 +180,9 @@
     if (name === "progress") renderProgress();
     if (name === "survey") hydrateSurvey();
     if (name === "sos") resetSos();
+    if (name === "audio" && window.BreatheAudioSupport) {
+      window.BreatheAudioSupport.onScreenShow();
+    }
     requestAnimationFrame(function () {
       refreshRevealObserver();
     });
@@ -738,30 +745,6 @@
       resetSosMoodUi();
     });
   }
-
-  /* Audio cards */
-  var audioTitles = {
-    urge: "5 минут против тяги",
-    evening: "Вечернее расслабление",
-    morning: "Утренний настрой",
-    stress: "Антистресс"
-  };
-
-  document.querySelectorAll(".audio-card").forEach(function (card) {
-    card.addEventListener("click", function () {
-      var id = card.getAttribute("data-audio");
-      var title = audioTitles[id] || "Аудио";
-      showToast("«" + title + "»: в MVP трека нет — в полной версии откроется плеер. Спасибо за интерес!");
-    });
-    card.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        card.click();
-      }
-    });
-    card.tabIndex = 0;
-    card.setAttribute("role", "button");
-  });
 
   /* Поддержка дня на главной: статичные фразы, случайная при загрузке */
   var aiSupportPhrases = [
