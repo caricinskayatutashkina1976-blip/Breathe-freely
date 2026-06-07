@@ -774,8 +774,25 @@
     el.textContent = list[i];
   }
 
+  function initFixedBackground() {
+    var bg = document.getElementById("app-bg");
+    if (!bg) return;
+    function pinBackground() {
+      bg.style.top = "0px";
+      bg.style.left = "0px";
+      bg.style.right = "0px";
+      bg.style.bottom = "0px";
+      bg.style.transform = "none";
+    }
+    pinBackground();
+    window.addEventListener("scroll", pinBackground, { passive: true });
+    window.addEventListener("resize", pinBackground, { passive: true });
+    window.addEventListener("orientationchange", pinBackground, { passive: true });
+  }
+
   /* First paint */
   initTheme();
+  initFixedBackground();
   setScreen("home");
   setAiSupportOfTheDay();
   companionShowForCurrentTime();

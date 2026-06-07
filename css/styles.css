@@ -34,50 +34,73 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  min-height: 100%;
+  height: 100%;
   background-color: #0c1218;
+  overscroll-behavior-y: none;
 }
 
 body {
   margin: 0;
-  min-height: 100dvh;
+  min-height: 100%;
   font-family: var(--font);
   color: var(--text);
   background-color: #0c1218;
   line-height: 1.55;
   transition: color 0.55s var(--ease-out-soft);
+  overscroll-behavior-y: none;
 }
 
-/* Горный фон: фиксированное <img>, без анимаций и смещения при скролле */
-.app-bg__photo {
+/* Горный фон: один fixed-контейнер, картинка absolute внутри — не скроллится */
+.app-bg {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout style paint;
+}
+
+.app-bg__photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
   object-fit: cover;
   object-position: center center;
-  z-index: -5;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  transform: none;
+  will-change: auto;
 }
 
 .app-bg__overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  z-index: -4;
+  position: absolute;
+  inset: 0;
   background: linear-gradient(var(--overlay-start), var(--overlay-end));
   pointer-events: none;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  transform: none;
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  isolation: isolate;
 }
 
 .top-bar {
@@ -183,12 +206,10 @@ body {
 
 .main {
   position: relative;
-  z-index: 1;
   max-width: 480px;
   margin: 0 auto;
   padding: 1rem 1rem calc(1.5rem + var(--safe-bottom));
   background: transparent;
-  overflow-x: clip;
 }
 
 .screen[hidden] {
