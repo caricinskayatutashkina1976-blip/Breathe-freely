@@ -23,7 +23,9 @@
       celebratedMilestones: [],
       lastMood: "",
       lastMoodDate: "",
-      eveningRitualDate: ""
+      eveningRitualDate: "",
+      communityCount: 0,
+      communityCountDate: ""
     }
   };
 
@@ -41,6 +43,8 @@
     base.lastMood = typeof raw.lastMood === "string" ? raw.lastMood : "";
     base.lastMoodDate = typeof raw.lastMoodDate === "string" ? raw.lastMoodDate : "";
     base.eveningRitualDate = typeof raw.eveningRitualDate === "string" ? raw.eveningRitualDate : "";
+    base.communityCount = Math.max(0, parseInt(raw.communityCount, 10) || 0);
+    base.communityCountDate = typeof raw.communityCountDate === "string" ? raw.communityCountDate : "";
     return base;
   }
 
@@ -150,7 +154,7 @@
     var active = document.querySelector(".screen:not([hidden])");
     if (!active) return;
     var nodes = active.querySelectorAll(
-      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening"
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
     );
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(

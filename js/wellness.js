@@ -2,17 +2,15 @@
   "use strict";
 
   var MOTIVATION = [
-    "✨ Ты сильнее своей привычки.",
-    "✨ Ещё одна маленькая победа.",
-    "✨ Ты уже меняешь свою жизнь.",
-    "✨ Сегодня ты выбрал свободу.",
-    "✨ Организм благодарит тебя.",
-    "✨ Сделай ещё один спокойный вдох.",
-    "✨ Каждая минута имеет значение.",
-    "✨ Ты справляешься.",
-    "✨ Ты уже молодец.",
-    "✨ Свобода начинается именно сейчас."
+    "Ты сильнее своей привычки.",
+    "Ещё одна маленькая победа.",
+    "Сегодня ты выбрал свободу.",
+    "Организм благодарит тебя.",
+    "Ты справляешься.",
+    "Свобода начинается сейчас."
   ];
+
+  var COMMUNITY_BASE = 1284;
 
   var MOOD_REPLIES = {
     great: "Как здорово чувствовать эту лёгкость. Побудь в ней ещё немного — ты это заслужил(а).",
@@ -23,16 +21,17 @@
   };
 
   var MILESTONES = [
-    { days: 0, label: "📅 Сегодня", badge: "🏅 Начало пути", title: "Сегодня" },
-    { days: 3, label: "📅 3 дня", badge: "🏅 Первые 3 дня", title: "Первые 3 дня" },
-    { days: 7, label: "📅 7 дней", badge: "🏅 Первая неделя", title: "Первая неделя" },
-    { days: 14, label: "📅 14 дней", badge: "🏅 Две недели", title: "Две недели свободы" },
-    { days: 30, label: "📅 30 дней", badge: "🏅 Первый месяц", title: "Первый месяц" },
-    { days: 100, label: "📅 100 дней", badge: "🏅 Сто дней свободы", title: "Сто дней на пути" }
+    { days: 0, label: "Сегодня", badge: "🏅 Начало пути", title: "Сегодня" },
+    { days: 3, label: "3 дня", badge: "🏅 Первые 3 дня", title: "Первые 3 дня" },
+    { days: 7, label: "7 дней", badge: "🏅 Первая неделя", title: "Первая неделя" },
+    { days: 14, label: "14 дней", badge: "🏅 Две недели", title: "Две недели свободы" },
+    { days: 30, label: "30 дней", badge: "🏅 Первый месяц", title: "Первый месяц" },
+    { days: 100, label: "100 дней", badge: "🏅 Сто дней свободы", title: "Сто дней на пути" }
   ];
 
-  var LEAF_COUNT = 30;
+  var LEAF_COUNT = 100;
   var treeBuilt = false;
+  var communityObserver = null;
 
   function app() {
     return window.BreatheApp || null;
@@ -108,18 +107,17 @@
     crown.setAttribute("id", "wellness-tree-crown");
     svg.appendChild(crown);
 
-    var positions = [
-      [72, 58], [88, 48], [104, 44], [120, 50], [128, 64], [118, 78], [100, 82], [82, 76], [64, 68],
-      [76, 88], [92, 92], [108, 90], [124, 84], [132, 72], [110, 58], [94, 62], [78, 72], [86, 52],
-      [102, 52], [116, 58], [126, 70], [114, 86], [96, 94], [80, 86], [70, 74], [98, 68], [106, 74],
-      [118, 66], [90, 66], [100, 56]
-    ];
-
     for (var i = 0; i < LEAF_COUNT; i++) {
+      var angle = (i / LEAF_COUNT) * Math.PI * 2 - Math.PI / 2;
+      var ring = Math.floor(i / 34);
+      var rx = 28 + ring * 9;
+      var ry = 22 + ring * 7;
+      var cx = 100 + Math.cos(angle) * rx;
+      var cy = 72 + Math.sin(angle) * ry;
       var leaf = document.createElementNS(svgNS, "circle");
-      leaf.setAttribute("cx", String(positions[i][0]));
-      leaf.setAttribute("cy", String(positions[i][1]));
-      leaf.setAttribute("r", "5");
+      leaf.setAttribute("cx", String(cx.toFixed(1)));
+      leaf.setAttribute("cy", String(cy.toFixed(1)));
+      leaf.setAttribute("r", "3");
       leaf.setAttribute("class", "wellness-tree__leaf");
       leaf.setAttribute("data-leaf-idx", String(i));
       svg.appendChild(leaf);
@@ -130,7 +128,8 @@
 
   function renderTree(totalVictories) {
     buildTree();
-    var active = Math.min(LEAF_COUNT, Math.round((Math.min(totalVictories, 100) / 100) * LEAF_COUNT));
+    var capped = Math.min(totalVictories, LEAF_COUNT);
+    var active = capped;
     var leaves = document.querySelectorAll(".wellness-tree__leaf");
     leaves.forEach(function (leaf, idx) {
       var on = idx < active;
@@ -139,12 +138,93 @@
     });
     var crown = document.getElementById("wellness-tree-crown");
     if (crown) {
-      crown.classList.toggle("wellness-tree__crown--full", totalVictories >= 100);
+      crown.classList.toggle("wellness-tree__crown--full", capped >= 100);
+      crown.style.fill = "rgba(124, 184, 154, " + (0.1 + (capped / 100) * 0.32).toFixed(2) + ")";
     }
     var prog = document.getElementById("wellness-tree-progress");
     if (prog) {
-      prog.textContent = Math.min(totalVictories, 100) + " из 100 листьев";
+      prog.textContent = capped + " из 100 листьев";
     }
+  }
+
+  function getCommunityCount() {
+    var w = getWellness();
+    var key = todayKey();
+    if (w && w.communityCountDate === key && w.communityCount) {
+      return w.communityCount;
+    }
+    var dayNum = Math.floor(Date.now() / 86400000);
+    var count = COMMUNITY_BASE + (dayNum % 31) - 15;
+    if (w) {
+      w.communityCount = count;
+      w.communityCountDate = key;
+      save();
+    }
+    return count;
+  }
+
+  function formatCommunity(n) {
+    return n.toLocaleString("ru-RU");
+  }
+
+  function animateCommunityCounter(target) {
+    var el = document.getElementById("wellness-community-count");
+    if (!el || el.dataset.animated === "1") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = formatCommunity(target);
+      el.dataset.animated = "1";
+      return;
+    }
+    var duration = 2000;
+    var startVal = Math.max(0, target - 120);
+    var startTime = null;
+    var lastVal = startVal;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var p = Math.min(1, (ts - startTime) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(startVal + (target - startVal) * eased);
+      el.textContent = formatCommunity(val);
+      if (val !== lastVal) {
+        el.classList.remove("is-ticking");
+        void el.offsetWidth;
+        el.classList.add("is-ticking");
+        lastVal = val;
+      }
+      if (p < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = formatCommunity(target);
+        el.dataset.animated = "1";
+      }
+    }
+    el.textContent = formatCommunity(startVal);
+    requestAnimationFrame(step);
+  }
+
+  function initCommunityCounter() {
+    var section = document.getElementById("wellness-community");
+    var el = document.getElementById("wellness-community-count");
+    if (!section || !el) return;
+    if (el.dataset.animated === "1") return;
+    var target = getCommunityCount();
+    if (!("IntersectionObserver" in window)) {
+      animateCommunityCounter(target);
+      return;
+    }
+    if (communityObserver) communityObserver.disconnect();
+    communityObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            animateCommunityCounter(target);
+            communityObserver.unobserve(en.target);
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    communityObserver.observe(section);
   }
 
   function renderJourney(days) {
@@ -179,7 +259,7 @@
     if (!modal || !milestone) return;
     if (badge) badge.textContent = milestone.badge;
     if (title) title.textContent = milestone.title;
-    if (text) text.textContent = "Вы дошли до этапа «" + milestone.label.replace("📅 ", "") + "». Это ваша победа.";
+    if (text) text.textContent = "Вы дошли до этапа «" + milestone.label + "». Это ваша победа.";
     modal.hidden = false;
     document.body.classList.add("wellness-achievement-open");
   }
@@ -263,6 +343,7 @@
     renderMood();
     renderEvening();
     checkMilestones(days);
+    initCommunityCounter();
   }
 
   function recordVictory() {
