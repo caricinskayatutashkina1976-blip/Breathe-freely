@@ -143,19 +143,31 @@
   }
 
   var revealObserver = null;
+  var revealRefreshScheduled = false;
 
-  function refreshRevealObserver() {
-    if (!("IntersectionObserver" in window)) {
-      document.querySelectorAll(".reveal").forEach(function (el) {
-        el.classList.add("reveal--visible");
+  function isTouchUi() {
+    return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  }
+
+  function getRevealNodes(active) {
+    return active.querySelectorAll(
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audio-tab-panel:not([hidden]) > .card, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-voices, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-library, :scope > .audio-tab-panel:not([hidden]) > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
+    );
+  }
+
+  function refreshRevealObserverNow() {
+    var active = document.querySelector(".screen:not([hidden])");
+    if (!active) return;
+    var nodes = getRevealNodes(active);
+
+    if (isTouchUi() || !("IntersectionObserver" in window)) {
+      if (revealObserver) revealObserver.disconnect();
+      nodes.forEach(function (el) {
+        el.classList.add("reveal", "reveal--visible");
       });
       return;
     }
-    var active = document.querySelector(".screen:not([hidden])");
-    if (!active) return;
-    var nodes = active.querySelectorAll(
-      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audio-tab-panel:not([hidden]) > .card, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-voices, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-library, :scope > .audio-tab-panel:not([hidden]) > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
-    );
+
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(
       function (entries) {
@@ -177,6 +189,15 @@
       } else {
         revealObserver.observe(el);
       }
+    });
+  }
+
+  function refreshRevealObserver() {
+    if (revealRefreshScheduled) return;
+    revealRefreshScheduled = true;
+    requestAnimationFrame(function () {
+      revealRefreshScheduled = false;
+      refreshRevealObserverNow();
     });
   }
 
@@ -842,9 +863,10 @@
       bg.style.transform = "none";
     }
     pinBackground();
-    window.addEventListener("scroll", pinBackground, { passive: true });
     window.addEventListener("resize", pinBackground, { passive: true });
-    window.addEventListener("orientationchange", pinBackground, { passive: true });
+    window.addEventListener("orientationchange", function () {
+      setTimeout(pinBackground, 120);
+    }, { passive: true });
   }
 
   window.BreatheApp = {

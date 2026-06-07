@@ -330,10 +330,9 @@ body {
     border-color 0.35s ease,
     background-color 0.65s var(--ease-out-soft),
     color 0.55s var(--ease-out-soft);
-  will-change: transform;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .screen > .card {
     animation: cardAmbient 14s ease-in-out infinite;
   }
@@ -2331,7 +2330,7 @@ body {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   [data-theme="night"] .screen > .card {
     animation-name: cardAmbientNight;
   }
@@ -3779,5 +3778,94 @@ body.wellness-achievement-open {
 
   .wellness-community__count.is-ticking {
     animation: none;
+  }
+}
+
+/* ——— Mobile / touch: performance & no sticky-hover ——— */
+@media (hover: none), (pointer: coarse) {
+  .card,
+  .btn,
+  .btn--primary,
+  .btn--accent,
+  .btn--outline,
+  .btn--soft,
+  .top-bar,
+  .audio-tabs,
+  .track-player,
+  .theme-switch {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .card {
+    background: rgba(250, 247, 242, 0.09);
+  }
+
+  .screen > .card {
+    animation: none !important;
+  }
+
+  .wellness-particles,
+  .hero__atmosphere,
+  .ai-support__decor,
+  .companion__aura,
+  .audiosupport-hero__mist,
+  .meditation-hero__mist,
+  .wellness-victories__glow,
+  .wellness-evening__glow,
+  .wellness-tree__aura,
+  .wellness-community__glow,
+  .voice-card__glow,
+  .meditation-card__glow,
+  .track-player__ring {
+    animation: none !important;
+  }
+
+  .wellness-particles {
+    display: none;
+  }
+
+  .card:hover,
+  .card:active,
+  .card--link:hover,
+  .card--link:active,
+  .btn:hover,
+  .voice-card:hover,
+  .wellness-mood__chip:hover,
+  .audio-tabs__btn:hover,
+  .track-btn:hover:not(:disabled),
+  .sos-chip:hover,
+  .theme-switch__btn:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .btn:active,
+  .audio-tabs__btn:active,
+  .wellness-mood__chip:active,
+  .track-btn:active:not(:disabled),
+  .sos-chip:active {
+    opacity: 0.86;
+    transform: none !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn,
+  .btn-ghost,
+  .audio-tabs__btn,
+  .wellness-mood__chip,
+  .voice-card__btn,
+  .track-btn,
+  .sos-chip,
+  .card--link,
+  .theme-switch__btn,
+  button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
