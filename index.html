@@ -29,6 +29,7 @@
       fetchpriority="high"
     />
     <div class="app-bg__overlay"></div>
+    <div class="wellness-particles" aria-hidden="true"></div>
   </div>
 
   <div class="app-shell">
@@ -113,6 +114,61 @@
           <button type="button" class="btn btn--outline companion__btn" id="companion-refresh">Получить поддержку</button>
         </div>
       </section>
+
+      <section class="card wellness-victories" id="wellness-victories" aria-labelledby="wellness-victories-title">
+        <div class="wellness-victories__glow" aria-hidden="true"></div>
+        <div class="wellness-victories__inner">
+          <p class="wellness-victories__eyebrow">Ты не один</p>
+          <h2 class="wellness-victories__title" id="wellness-victories-title">Сегодня мои победы</h2>
+          <ul class="wellness-victories__stats">
+            <li><span class="wellness-victories__icon" aria-hidden="true">🏆</span> Сегодня я справился с тягой: <strong id="wellness-today-count">0</strong> раз</li>
+            <li><span class="wellness-victories__icon" aria-hidden="true">🌱</span> Всего побед: <strong id="wellness-total-count">0</strong></li>
+            <li><span class="wellness-victories__icon" aria-hidden="true">❤️</span> Дней на пути: <strong id="wellness-days-count">0</strong></li>
+          </ul>
+          <p class="wellness-victories__motivation" id="wellness-motivation" hidden></p>
+          <button type="button" class="btn btn--primary btn--block" id="wellness-feel-better">❤️ Мне стало легче</button>
+        </div>
+      </section>
+
+      <section class="card wellness-tree" id="wellness-tree" aria-labelledby="wellness-tree-title">
+        <div class="wellness-tree__aura" aria-hidden="true"></div>
+        <div class="wellness-tree__inner">
+          <h2 class="wellness-tree__title" id="wellness-tree-title">Дерево свободы</h2>
+          <p class="wellness-tree__sub muted">Каждая победа — новый листочек. Сто побед — полное зелёное дерево.</p>
+          <div class="wellness-tree__canvas" id="wellness-tree-canvas" aria-hidden="true"></div>
+          <p class="wellness-tree__progress" id="wellness-tree-progress">0 из 100 листьев</p>
+        </div>
+      </section>
+
+      <section class="card wellness-mood" id="wellness-mood" aria-labelledby="wellness-mood-title">
+        <h2 class="wellness-mood__title h2" id="wellness-mood-title">Сегодня моё состояние</h2>
+        <p class="muted wellness-mood__sub">Без оценки — просто отметить, как сейчас внутри.</p>
+        <div class="wellness-mood__chips" role="group" aria-label="Выбор состояния">
+          <button type="button" class="wellness-mood__chip" data-mood="great">😊 Отличное</button>
+          <button type="button" class="wellness-mood__chip" data-mood="good">🙂 Хорошее</button>
+          <button type="button" class="wellness-mood__chip" data-mood="ok">😐 Нормальное</button>
+          <button type="button" class="wellness-mood__chip" data-mood="hard">😔 Тяжёлое</button>
+          <button type="button" class="wellness-mood__chip" data-mood="veryhard">😢 Очень тяжело</button>
+        </div>
+        <p class="wellness-mood__reply" id="wellness-mood-reply" hidden></p>
+      </section>
+
+      <section class="card wellness-journey" id="wellness-journey" aria-labelledby="wellness-journey-title">
+        <h2 class="wellness-journey__title h2" id="wellness-journey-title">Мой путь</h2>
+        <p class="muted wellness-journey__sub">Мягкие вехи — без давления, только признание вашего пути.</p>
+        <ul class="wellness-journey__milestones" id="wellness-journey-list"></ul>
+      </section>
+
+      <section class="card wellness-evening" id="wellness-evening" hidden aria-labelledby="wellness-evening-title">
+        <div class="wellness-evening__glow" aria-hidden="true"></div>
+        <div class="wellness-evening__inner">
+          <p class="wellness-evening__eyebrow">Вечерний ритуал</p>
+          <h2 class="wellness-evening__title" id="wellness-evening-title">✨ Поблагодари себя за сегодняшний день</h2>
+          <button type="button" class="btn btn--soft btn--block" id="wellness-evening-btn">Я справился сегодня</button>
+          <p class="wellness-evening__reply" id="wellness-evening-reply" hidden>❤️ Спасибо тебе. Ты становишься свободнее с каждым днём.</p>
+        </div>
+      </section>
+
       <section class="recovery card" aria-labelledby="recovery-heading">
         <div class="recovery__head">
           <p class="recovery__eyebrow">Нежный ориентир во времени</p>
@@ -499,8 +555,20 @@
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <div class="wellness-achievement" id="wellness-achievement" hidden role="dialog" aria-modal="true" aria-labelledby="wellness-achievement-title">
+    <div class="wellness-achievement__backdrop"></div>
+    <div class="wellness-achievement__card">
+      <div class="wellness-achievement__shine" aria-hidden="true"></div>
+      <p class="wellness-achievement__badge" id="wellness-achievement-badge">🏅</p>
+      <h3 class="wellness-achievement__title" id="wellness-achievement-title">Достижение</h3>
+      <p class="wellness-achievement__text" id="wellness-achievement-text"></p>
+      <button type="button" class="btn btn--primary btn--block" id="wellness-achievement-close">Продолжить путь</button>
+    </div>
+  </div>
   </div>
 
+  <script src="js/wellness.js"></script>
   <script src="js/audio-support.js"></script>
   <script src="js/app.js"></script>
 </body>

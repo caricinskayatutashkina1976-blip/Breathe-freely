@@ -2727,3 +2727,440 @@ html.theme-transitioning::before {
     animation: none;
   }
 }
+
+/* ——— Wellness: победы, дерево, путь, настроение ——— */
+.wellness-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px);
+  background-size: 56px 56px;
+  animation: wellnessParticlesDrift 120s linear infinite;
+}
+
+@keyframes wellnessParticlesDrift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-36px, -28px);
+  }
+}
+
+.wellness-victories {
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-victories__glow,
+.wellness-evening__glow {
+  position: absolute;
+  inset: -25% -15%;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 200, 150, 0.12), transparent 60%);
+  animation: wellnessBreathLight 18s ease-in-out infinite alternate;
+}
+
+@keyframes wellnessBreathLight {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+.wellness-victories__inner,
+.wellness-evening__inner,
+.wellness-tree__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.wellness-victories__eyebrow,
+.wellness-evening__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mint-deep);
+}
+
+.wellness-victories__title {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.15rem, 4vw, 1.35rem);
+  font-weight: 800;
+}
+
+.wellness-victories__stats {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.wellness-victories__stats li {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.wellness-victories__stats strong {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.wellness-victories__icon {
+  margin-right: 0.25rem;
+}
+
+.wellness-victories__motivation {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.55s var(--ease-out-soft), transform 0.55s var(--ease-out-soft);
+}
+
+.wellness-victories__motivation--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wellness-tree {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.wellness-tree__aura {
+  position: absolute;
+  inset: -20% -10%;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 80%, rgba(124, 184, 154, 0.15), transparent 55%);
+  animation: wellnessBreathLight 22s ease-in-out infinite alternate-reverse;
+}
+
+.wellness-tree__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+.wellness-tree__sub {
+  margin: 0 0 0.75rem;
+}
+
+.wellness-tree__canvas {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 0.65rem;
+  max-width: 200px;
+}
+
+.wellness-tree__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wellness-tree__trunk {
+  fill: rgba(90, 60, 40, 0.75);
+}
+
+.wellness-tree__crown {
+  fill: rgba(124, 184, 154, 0.12);
+  transition: fill 1.2s var(--ease-out-soft);
+}
+
+.wellness-tree__crown--full {
+  fill: rgba(124, 184, 154, 0.38);
+  filter: drop-shadow(0 0 18px rgba(124, 184, 154, 0.35));
+}
+
+.wellness-tree__leaf {
+  fill: rgba(124, 184, 154, 0.15);
+  opacity: 0;
+  transform-origin: center;
+  transition: opacity 0.6s var(--ease-out-soft), fill 0.6s ease;
+}
+
+.wellness-tree__leaf--on {
+  opacity: 1;
+  fill: rgba(140, 200, 160, 0.85);
+}
+
+.wellness-tree__leaf--new {
+  animation: wellnessLeafPop 0.7s var(--ease-out-soft);
+}
+
+@keyframes wellnessLeafPop {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.wellness-tree__progress {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.wellness-mood__title {
+  margin-bottom: 0.35rem;
+}
+
+.wellness-mood__sub {
+  margin: 0 0 0.85rem;
+}
+
+.wellness-mood__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.wellness-mood__chip {
+  flex: 1 1 calc(50% - 0.25rem);
+  min-width: 7.5rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.65rem 0.55rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--ease-out-soft),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.wellness-mood__chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(180, 230, 210, 0.35);
+}
+
+.wellness-mood__chip--active {
+  border-color: var(--mint-deep);
+  box-shadow: 0 0 20px rgba(140, 210, 190, 0.15);
+}
+
+.wellness-mood__reply {
+  margin: 0.85rem 0 0;
+  padding: 0.85rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease-out-soft), transform 0.5s var(--ease-out-soft);
+}
+
+.wellness-mood__reply--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wellness-journey__title {
+  margin-bottom: 0.35rem;
+}
+
+.wellness-journey__sub {
+  margin: 0 0 0.85rem;
+}
+
+.wellness-journey__milestones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wellness-journey__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.wellness-journey__item--done {
+  color: var(--text);
+  border-color: rgba(124, 184, 154, 0.28);
+  background: rgba(124, 184, 154, 0.08);
+}
+
+.wellness-journey__item--celebrated {
+  box-shadow: 0 0 18px rgba(124, 184, 154, 0.12);
+}
+
+.wellness-journey__status {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.wellness-evening {
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-evening__title {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.wellness-evening__reply {
+  margin: 0.85rem 0 0;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.55;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.55s var(--ease-out-soft), transform 0.55s var(--ease-out-soft);
+}
+
+.wellness-evening__reply--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wellness-achievement {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.wellness-achievement[hidden] {
+  display: none !important;
+}
+
+.wellness-achievement__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 12, 18, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.wellness-achievement__card {
+  position: relative;
+  width: min(100%, 360px);
+  padding: 1.5rem 1.35rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  background: rgba(18, 28, 42, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 24px 64px rgba(0, 12, 28, 0.5);
+  text-align: center;
+  animation: wellnessAchievementIn 0.65s var(--ease-out-soft);
+}
+
+@keyframes wellnessAchievementIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.wellness-achievement__shine {
+  position: absolute;
+  inset: -30% -20%;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 210, 140, 0.2), transparent 55%);
+  animation: wellnessBreathLight 14s ease-in-out infinite alternate;
+}
+
+.wellness-achievement__badge {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.wellness-achievement__title {
+  margin: 0 0 0.45rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.wellness-achievement__text {
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+body.wellness-achievement-open {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wellness-particles,
+  .wellness-victories__glow,
+  .wellness-evening__glow,
+  .wellness-tree__aura,
+  .wellness-achievement__shine {
+    animation: none !important;
+  }
+
+  .wellness-tree__leaf--new {
+    animation: none;
+  }
+
+  .wellness-achievement__card {
+    animation: none;
+  }
+}

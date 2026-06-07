@@ -15,8 +15,34 @@
     quitTimestamp: null,
     pricePerPack: 250,
     cigsPerPack: 20,
-    path7Checks: [false, false, false, false, false, false, false]
+    path7Checks: [false, false, false, false, false, false, false],
+    wellness: {
+      totalVictories: 0,
+      todayVictories: 0,
+      todayVictoryDate: "",
+      celebratedMilestones: [],
+      lastMood: "",
+      lastMoodDate: "",
+      eveningRitualDate: ""
+    }
   };
+
+  function normalizeWellness(raw) {
+    var base = Object.assign({}, defaultState.wellness);
+    if (!raw || typeof raw !== "object") return base;
+    base.totalVictories = Math.max(0, parseInt(raw.totalVictories, 10) || 0);
+    base.todayVictories = Math.max(0, parseInt(raw.todayVictories, 10) || 0);
+    base.todayVictoryDate = typeof raw.todayVictoryDate === "string" ? raw.todayVictoryDate : "";
+    base.celebratedMilestones = Array.isArray(raw.celebratedMilestones)
+      ? raw.celebratedMilestones.filter(function (n) {
+          return typeof n === "number" || typeof n === "string";
+        })
+      : [];
+    base.lastMood = typeof raw.lastMood === "string" ? raw.lastMood : "";
+    base.lastMoodDate = typeof raw.lastMoodDate === "string" ? raw.lastMoodDate : "";
+    base.eveningRitualDate = typeof raw.eveningRitualDate === "string" ? raw.eveningRitualDate : "";
+    return base;
+  }
 
   function loadState() {
     try {
@@ -25,6 +51,7 @@
       var parsed = JSON.parse(raw);
       var merged = Object.assign({}, defaultState, parsed);
       merged.path7Checks = normalizePath7Checks(merged.path7Checks);
+      merged.wellness = normalizeWellness(merged.wellness);
       return merged;
     } catch (e) {
       return Object.assign({}, defaultState);
@@ -123,7 +150,7 @@
     var active = document.querySelector(".screen:not([hidden])");
     if (!active) return;
     var nodes = active.querySelectorAll(
-      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library"
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening"
     );
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(
@@ -176,6 +203,7 @@
     setScreen(name);
     if (name === "home") {
       companionShowForCurrentTime();
+      if (window.BreatheWellness) window.BreatheWellness.render();
     }
     if (name === "progress") renderProgress();
     if (name === "survey") hydrateSurvey();
@@ -196,6 +224,7 @@
       setScreen("home");
       btnBack.hidden = true;
       companionShowForCurrentTime();
+      if (window.BreatheWellness) window.BreatheWellness.render();
       requestAnimationFrame(function () {
         refreshRevealObserver();
       });
@@ -210,6 +239,7 @@
     setScreen(prev);
     if (prev === "home") {
       companionShowForCurrentTime();
+      if (window.BreatheWellness) window.BreatheWellness.render();
     }
     if (prev === "progress") renderProgress();
     if (prev === "survey") hydrateSurvey();
@@ -684,6 +714,7 @@
     setScreen("home");
     btnBack.hidden = true;
     companionShowForCurrentTime();
+    if (window.BreatheWellness) window.BreatheWellness.render();
     requestAnimationFrame(function () {
       refreshRevealObserver();
     });
@@ -790,6 +821,26 @@
     window.addEventListener("orientationchange", pinBackground, { passive: true });
   }
 
+  window.BreatheApp = {
+    getState: function () {
+      return state;
+    },
+    saveState: function () {
+      saveState(state);
+    },
+    getDaysOnPath: function () {
+      if (!state.quitTimestamp) return 0;
+      var quit = new Date(state.quitTimestamp);
+      var now = new Date();
+      return Math.max(0, Math.floor((now.getTime() - quit.getTime()) / 86400000));
+    },
+    startOfToday: startOfToday,
+    showToast: showToast,
+    refreshReveal: function () {
+      requestAnimationFrame(refreshRevealObserver);
+    }
+  };
+
   /* First paint */
   initTheme();
   initFixedBackground();
@@ -797,6 +848,7 @@
   setAiSupportOfTheDay();
   companionShowForCurrentTime();
   renderProgress();
+  if (window.BreatheWellness) window.BreatheWellness.render();
   requestAnimationFrame(function () {
     refreshRevealObserver();
   });

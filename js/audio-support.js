@@ -349,7 +349,9 @@
     var feelBtn = document.getElementById("audiosupport-feel-better");
     if (feelBtn) {
       feelBtn.addEventListener("click", function () {
+        if (window.BreatheWellness) window.BreatheWellness.recordVictory();
         if (feelMessageEl) {
+          feelMessageEl.textContent = "Каждая маленькая победа делает вас сильнее.";
           feelMessageEl.hidden = false;
           feelMessageEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
