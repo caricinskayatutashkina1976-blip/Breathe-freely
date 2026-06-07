@@ -35,8 +35,9 @@
   <div class="app-shell">
   <header class="top-bar" role="banner">
     <div class="top-bar__start">
-      <button type="button" class="top-bar__back btn-ghost" id="btn-back" hidden aria-label="Назад">
-        ← Назад
+      <button type="button" class="top-bar__back btn-ghost btn--with-icon" id="btn-back" hidden aria-label="Назад">
+        <span class="icon icon--sm" data-icon="arrow-left" data-icon-size="18"></span>
+        <span>Назад</span>
       </button>
     </div>
     <span class="top-bar__logo">Дыши Свободно</span>
@@ -121,12 +122,24 @@
           <p class="wellness-victories__eyebrow">Ты не один</p>
           <h2 class="wellness-victories__title" id="wellness-victories-title">Сегодня мои победы</h2>
           <ul class="wellness-victories__stats">
-            <li><span class="wellness-victories__icon" aria-hidden="true">🏆</span> Сегодня я справился с тягой: <strong id="wellness-today-count">0</strong> раз</li>
-            <li><span class="wellness-victories__icon" aria-hidden="true">🌱</span> Всего побед: <strong id="wellness-total-count">0</strong></li>
-            <li><span class="wellness-victories__icon" aria-hidden="true">❤️</span> Дней на пути: <strong id="wellness-days-count">0</strong></li>
+            <li>
+              <span class="wellness-victories__icon-wrap"><span class="icon icon--sm" data-icon="trophy" data-icon-size="18"></span></span>
+              <span>Сегодня я справился с тягой: <strong id="wellness-today-count">0</strong> раз</span>
+            </li>
+            <li>
+              <span class="wellness-victories__icon-wrap"><span class="icon icon--sm" data-icon="sprout" data-icon-size="18"></span></span>
+              <span>Всего побед: <strong id="wellness-total-count">0</strong></span>
+            </li>
+            <li>
+              <span class="wellness-victories__icon-wrap"><span class="icon icon--sm" data-icon="heart" data-icon-size="18"></span></span>
+              <span>Дней на пути: <strong id="wellness-days-count">0</strong></span>
+            </li>
           </ul>
           <p class="wellness-victories__motivation" id="wellness-motivation" hidden></p>
-          <button type="button" class="btn btn--primary btn--block" id="wellness-feel-better">❤️ Мне стало легче</button>
+          <button type="button" class="btn btn--primary btn--block btn--with-icon" id="wellness-feel-better">
+            <span class="icon icon--sm" data-icon="heart" data-icon-size="18"></span>
+            <span>Мне стало легче</span>
+          </button>
         </div>
       </section>
 
@@ -150,11 +163,26 @@
         <h2 class="wellness-mood__title h2" id="wellness-mood-title">Сегодня моё состояние</h2>
         <p class="muted wellness-mood__sub">Без оценки — просто отметить, как сейчас внутри.</p>
         <div class="wellness-mood__chips" role="group" aria-label="Выбор состояния">
-          <button type="button" class="wellness-mood__chip" data-mood="great">😊 Отличное</button>
-          <button type="button" class="wellness-mood__chip" data-mood="good">🙂 Хорошее</button>
-          <button type="button" class="wellness-mood__chip" data-mood="ok">😐 Нормальное</button>
-          <button type="button" class="wellness-mood__chip" data-mood="hard">😔 Тяжёлое</button>
-          <button type="button" class="wellness-mood__chip" data-mood="veryhard">😢 Очень тяжело</button>
+          <button type="button" class="wellness-mood__chip" data-mood="great">
+            <span class="icon icon--sm" data-icon="sun" data-icon-size="18"></span>
+            <span>Отличное</span>
+          </button>
+          <button type="button" class="wellness-mood__chip" data-mood="good">
+            <span class="icon icon--sm" data-icon="mood-good" data-icon-size="18"></span>
+            <span>Хорошее</span>
+          </button>
+          <button type="button" class="wellness-mood__chip" data-mood="ok">
+            <span class="icon icon--sm" data-icon="mood-ok" data-icon-size="18"></span>
+            <span>Нормальное</span>
+          </button>
+          <button type="button" class="wellness-mood__chip" data-mood="hard">
+            <span class="icon icon--sm" data-icon="mood-hard" data-icon-size="18"></span>
+            <span>Тяжёлое</span>
+          </button>
+          <button type="button" class="wellness-mood__chip" data-mood="veryhard">
+            <span class="icon icon--sm" data-icon="cloud" data-icon-size="18"></span>
+            <span>Очень тяжело</span>
+          </button>
         </div>
         <p class="wellness-mood__reply" id="wellness-mood-reply" hidden></p>
       </section>
@@ -379,7 +407,7 @@
       <div class="card savings-hero" id="savings-card" hidden>
         <div class="savings-hero__bg" aria-hidden="true"></div>
         <div class="savings-hero__content">
-          <span class="savings-hero__badge" aria-hidden="true">✦</span>
+          <span class="savings-hero__badge" aria-hidden="true"><span class="icon icon--md" data-icon="star" data-icon-size="22"></span></span>
           <p class="savings-hero__eyebrow">Твоя забота о бюджете</p>
           <h3 class="savings-hero__title">Ты уже сохранил</h3>
           <p class="savings-hero__sum" id="savings-total">0 ₽</p>
@@ -517,18 +545,47 @@
     <section class="screen" id="screen-audio" data-screen="audio" aria-label="Аудиоподдержка" hidden>
       <div class="card audiosupport-hero">
         <div class="audiosupport-hero__mist" aria-hidden="true"></div>
+        <div class="meditation-hero__mist meditation-hero__mist--tab" id="audio-hero-mist-meditation" hidden aria-hidden="true"></div>
         <div class="audiosupport-hero__inner">
-          <p class="audiosupport-hero__eyebrow">Пространство спокойствия</p>
-          <h2 class="h2 audiosupport-hero__title">🎧 Аудиоподдержка</h2>
-          <p class="audiosupport-hero__lead">Выберите голос, который поможет вам пройти этот момент спокойно.</p>
+          <p class="audiosupport-hero__eyebrow" id="audio-hero-eyebrow">Пространство спокойствия</p>
+          <h2 class="h2 audiosupport-hero__title" id="audio-hero-title">Аудиоподдержка</h2>
+          <p class="audiosupport-hero__lead" id="audio-hero-lead">Выберите голос, который поможет вам пройти этот момент спокойно.</p>
         </div>
       </div>
 
+      <div class="audio-tabs" id="audio-tabs" role="tablist" aria-label="Разделы аудио">
+        <button
+          type="button"
+          class="audio-tabs__btn is-active"
+          id="audio-tab-btn-voices"
+          role="tab"
+          data-audio-tab="voices"
+          aria-selected="true"
+          aria-controls="audio-tab-voices"
+        >
+          <span class="icon icon--sm" data-icon="headphones" data-icon-size="18"></span>
+          <span>Голоса поддержки</span>
+        </button>
+        <button
+          type="button"
+          class="audio-tabs__btn"
+          id="audio-tab-btn-meditation"
+          role="tab"
+          data-audio-tab="meditation"
+          aria-selected="false"
+          aria-controls="audio-tab-meditation"
+        >
+          <span class="icon icon--sm" data-icon="leaf" data-icon-size="18"></span>
+          <span>Музыка для медитации</span>
+        </button>
+      </div>
+
+      <div class="audio-tab-panel" id="audio-tab-voices" role="tabpanel" aria-labelledby="audio-tab-btn-voices">
       <div class="audiosupport-voices" id="audiosupport-voices" role="group" aria-label="Выбор голоса">
         <article class="card voice-card" data-voice="female">
           <div class="voice-card__glow" aria-hidden="true"></div>
           <div class="voice-card__inner">
-            <p class="voice-card__icon" aria-hidden="true">👩</p>
+            <p class="voice-card__icon" aria-hidden="true"><span class="icon icon--md" data-icon="person" data-icon-size="22"></span></p>
             <h3 class="voice-card__title">Женский голос</h3>
             <p class="voice-card__desc">Тёплый, заботливый, мягкий голос, который сопровождает вас на пути к свободному дыханию.</p>
             <button type="button" class="btn btn--outline voice-card__btn">Выбрать</button>
@@ -537,7 +594,7 @@
         <article class="card voice-card" data-voice="male">
           <div class="voice-card__glow" aria-hidden="true"></div>
           <div class="voice-card__inner">
-            <p class="voice-card__icon" aria-hidden="true">👨</p>
+            <p class="voice-card__icon" aria-hidden="true"><span class="icon icon--md" data-icon="person-alt" data-icon-size="22"></span></p>
             <h3 class="voice-card__title">Мужской голос</h3>
             <p class="voice-card__desc">Спокойный, уверенный голос, создающий ощущение безопасности и поддержки.</p>
             <button type="button" class="btn btn--outline voice-card__btn">Выбрать</button>
@@ -557,40 +614,27 @@
       <div class="card audiosupport-complete" id="audiosupport-complete" hidden>
         <div class="audiosupport-complete__glow" aria-hidden="true"></div>
         <div class="audiosupport-complete__inner">
-          <p class="audiosupport-complete__icon" aria-hidden="true">✨</p>
-          <h3 class="audiosupport-complete__title">Отличная работа!</h3>
+          <p class="audiosupport-complete__icon" aria-hidden="true"><span class="icon icon--lg" data-icon="sparkle" data-icon-size="28"></span></p>
+          <h3 class="audiosupport-complete__title">Отличная работа</h3>
           <p class="audiosupport-complete__text">Сегодня вы сделали ещё один шаг к свободному дыханию.</p>
-          <button type="button" class="btn btn--primary audiosupport-complete__btn" id="audiosupport-feel-better">❤️ Мне стало легче</button>
+          <button type="button" class="btn btn--primary audiosupport-complete__btn btn--with-icon" id="audiosupport-feel-better">
+            <span class="icon icon--sm" data-icon="heart" data-icon-size="18"></span>
+            <span>Мне стало легче</span>
+          </button>
           <p class="audiosupport-complete__after" id="audiosupport-feel-message" hidden>Каждая маленькая победа делает вас сильнее.</p>
         </div>
       </div>
+      </div>
 
-      <button type="button" class="card card--link meditation-link-card" data-nav="meditation">
-        <span class="meditation-link-card__icon" aria-hidden="true">🌿</span>
-        <span class="meditation-link-card__text">
-          <span class="meditation-link-card__title">Музыка для медитации и расслабления</span>
-          <span class="meditation-link-card__sub muted">7 атмосферных треков — лес, туман, горы и сон</span>
-        </span>
-        <span class="meditation-link-card__arrow" aria-hidden="true">→</span>
-      </button>
-    </section>
-
-    <!-- 6. Музыка для медитации -->
-    <section class="screen" id="screen-meditation" data-screen="meditation" aria-label="Музыка для медитации и расслабления" hidden>
-      <div class="card meditation-hero">
-        <div class="meditation-hero__mist" aria-hidden="true"></div>
-        <div class="meditation-hero__inner">
-          <p class="meditation-hero__eyebrow">Пространство тишины</p>
-          <h2 class="h2 meditation-hero__title">🌿 Музыка для медитации и расслабления</h2>
-          <p class="meditation-hero__lead">
+      <div class="audio-tab-panel" id="audio-tab-meditation" role="tabpanel" aria-labelledby="audio-tab-btn-meditation" hidden>
+        <div class="card meditation-tab-intro">
+          <p class="meditation-tab-intro__eyebrow">Пространство тишины</p>
+          <p class="meditation-tab-intro__text muted">
             Атмосферные композиции из коллекции «Медитация Расслабление» — выберите звук, который поддержит вас прямо сейчас.
           </p>
         </div>
+        <div class="meditation-tracks" id="meditation-tracks" aria-live="polite"></div>
       </div>
-
-      <div class="meditation-tracks" id="meditation-tracks" aria-live="polite"></div>
-
-      <button type="button" class="btn btn--outline btn--block" data-nav="audio">← К аудиоподдержке</button>
     </section>
   </main>
 
@@ -600,7 +644,7 @@
     <div class="wellness-achievement__backdrop"></div>
     <div class="wellness-achievement__card">
       <div class="wellness-achievement__shine" aria-hidden="true"></div>
-      <p class="wellness-achievement__badge" id="wellness-achievement-badge">🏅</p>
+      <p class="wellness-achievement__badge" id="wellness-achievement-badge"><span class="icon icon--xl" data-icon="medal" data-icon-size="36"></span></p>
       <h3 class="wellness-achievement__title" id="wellness-achievement-title">Достижение</h3>
       <p class="wellness-achievement__text" id="wellness-achievement-text"></p>
       <button type="button" class="btn btn--primary btn--block" id="wellness-achievement-close">Продолжить путь</button>
@@ -608,9 +652,11 @@
   </div>
   </div>
 
+  <script src="js/icons.js"></script>
   <script src="js/wellness.js"></script>
   <script src="js/audio-support.js"></script>
   <script src="js/meditation-music.js"></script>
+  <script src="js/audio-tabs.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

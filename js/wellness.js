@@ -21,13 +21,20 @@
   };
 
   var MILESTONES = [
-    { days: 0, label: "Сегодня", badge: "🏅 Начало пути", title: "Сегодня" },
-    { days: 3, label: "3 дня", badge: "🏅 Первые 3 дня", title: "Первые 3 дня" },
-    { days: 7, label: "7 дней", badge: "🏅 Первая неделя", title: "Первая неделя" },
-    { days: 14, label: "14 дней", badge: "🏅 Две недели", title: "Две недели свободы" },
-    { days: 30, label: "30 дней", badge: "🏅 Первый месяц", title: "Первый месяц" },
-    { days: 100, label: "100 дней", badge: "🏅 Сто дней свободы", title: "Сто дней на пути" }
+    { days: 0, label: "Сегодня", badgeText: "Начало пути", title: "Сегодня" },
+    { days: 3, label: "3 дня", badgeText: "Первые 3 дня", title: "Первые 3 дня" },
+    { days: 7, label: "7 дней", badgeText: "Первая неделя", title: "Первая неделя" },
+    { days: 14, label: "14 дней", badgeText: "Две недели", title: "Две недели свободы" },
+    { days: 30, label: "30 дней", badgeText: "Первый месяц", title: "Первый месяц" },
+    { days: 100, label: "100 дней", badgeText: "Сто дней свободы", title: "Сто дней на пути" }
   ];
+
+  function milestoneIcon(size) {
+    if (window.BreatheIcons && window.BreatheIcons.render) {
+      return window.BreatheIcons.render("medal", { className: "icon--xs", size: size || 14 });
+    }
+    return "";
+  }
 
   var LEAF_COUNT = 100;
   var treeBuilt = false;
@@ -241,9 +248,9 @@
         '<span class="wellness-journey__label">' +
         m.label +
         "</span>" +
-        '<span class="wellness-journey__status">' +
-        (reached ? m.badge : "Впереди") +
-        "</span>";
+        (reached
+          ? '<span class="wellness-journey__status">' + milestoneIcon(14) + "<span>" + m.badgeText + "</span></span>"
+          : '<span class="wellness-journey__status wellness-journey__status--pending">Впереди</span>');
       if (reached && celebrated.indexOf(String(m.days)) !== -1) {
         li.classList.add("wellness-journey__item--celebrated");
       }
@@ -257,7 +264,9 @@
     var title = document.getElementById("wellness-achievement-title");
     var text = document.getElementById("wellness-achievement-text");
     if (!modal || !milestone) return;
-    if (badge) badge.textContent = milestone.badge;
+    if (badge && window.BreatheIcons) {
+      badge.innerHTML = window.BreatheIcons.render("medal", { className: "icon--xl", size: 36 });
+    }
     if (title) title.textContent = milestone.title;
     if (text) text.textContent = "Вы дошли до этапа «" + milestone.label + "». Это ваша победа.";
     modal.hidden = false;

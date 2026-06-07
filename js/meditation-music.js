@@ -46,6 +46,13 @@
     }
   ];
 
+  function icon(name, size) {
+    if (window.BreatheIcons && window.BreatheIcons.render) {
+      return window.BreatheIcons.render(name, { className: "icon--xs", size: size || 16 });
+    }
+    return "";
+  }
+
   var activeTrackId = null;
   var audioEl = new Audio();
   var tracksRoot = null;
@@ -172,7 +179,7 @@
       '<div class="meditation-card__glow" aria-hidden="true"></div>' +
       '<div class="meditation-card__inner">' +
       '<div class="track-card__head">' +
-      '  <span class="track-card__icon" aria-hidden="true">🎵</span>' +
+      '  <span class="track-card__icon" aria-hidden="true">' + icon("music", 18) + "</span>" +
       '  <div class="track-card__text">' +
       '    <h4 class="track-card__title">' +
       track.title +
@@ -187,9 +194,9 @@
       '    <div class="track-player__ring meditation-player__ring"></div>' +
       "  </div>" +
       '  <div class="track-player__controls">' +
-      '    <button type="button" class="track-btn track-btn--play" aria-label="Воспроизвести">▶️ Play</button>' +
-      '    <button type="button" class="track-btn track-btn--pause" aria-label="Пауза" disabled>⏸ Pause</button>' +
-      '    <button type="button" class="track-btn track-btn--stop" aria-label="Стоп" disabled>⏹ Stop</button>' +
+      '    <button type="button" class="track-btn track-btn--play" aria-label="Воспроизвести">' + icon("play", 14) + "<span>Play</span></button>" +
+      '    <button type="button" class="track-btn track-btn--pause" aria-label="Пауза" disabled>' + icon("pause", 14) + "<span>Pause</span></button>" +
+      '    <button type="button" class="track-btn track-btn--stop" aria-label="Стоп" disabled>' + icon("stop", 14) + "<span>Stop</span></button>" +
       "  </div>" +
       '  <div class="track-player__progress-wrap">' +
       '    <input type="range" class="track-player__progress" min="0" max="1000" value="0" aria-label="Прогресс воспроизведения" />' +

@@ -73,8 +73,7 @@
     survey: document.getElementById("screen-survey"),
     sos: document.getElementById("screen-sos"),
     progress: document.getElementById("screen-progress"),
-    audio: document.getElementById("screen-audio"),
-    meditation: document.getElementById("screen-meditation")
+    audio: document.getElementById("screen-audio")
   };
 
   var btnBack = document.getElementById("btn-back");
@@ -155,7 +154,7 @@
     var active = document.querySelector(".screen:not([hidden])");
     if (!active) return;
     var nodes = active.querySelectorAll(
-      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library, :scope > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audio-tabs, :scope > .audio-tab-panel:not([hidden]) > .card, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-voices, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-library, :scope > .audio-tab-panel:not([hidden]) > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
     );
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(
@@ -207,6 +206,12 @@
   }
 
   function navigate(name, push) {
+    var audioTab = null;
+    if (name === "meditation") {
+      name = "audio";
+      audioTab = "meditation";
+    }
+
     if (currentScreen === "sos" && name !== "sos") {
       resetSos();
     }
@@ -225,11 +230,12 @@
     if (name === "progress") renderProgress();
     if (name === "survey") hydrateSurvey();
     if (name === "sos") resetSos();
-    if (name === "audio" && window.BreatheAudioSupport) {
-      window.BreatheAudioSupport.onScreenShow();
-    }
-    if (name === "meditation" && window.BreatheMeditationMusic) {
-      window.BreatheMeditationMusic.onScreenShow();
+    if (name === "audio") {
+      if (window.BreatheAudioTabs) {
+        window.BreatheAudioTabs.onScreenShow(audioTab);
+      } else if (window.BreatheAudioSupport) {
+        window.BreatheAudioSupport.onScreenShow();
+      }
     }
     requestAnimationFrame(function () {
       refreshRevealObserver();
