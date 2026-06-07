@@ -246,6 +246,17 @@
     TRACKS.forEach(function (track) {
       tracksRoot.appendChild(buildTrackCard(track));
     });
+    tracksRoot.setAttribute("data-rendered-count", String(TRACKS.length));
+  }
+
+  function syncTracks() {
+    if (!tracksRoot) return;
+    var rendered = parseInt(tracksRoot.getAttribute("data-rendered-count"), 10) || 0;
+    var domCount = tracksRoot.childElementCount;
+    if (rendered !== TRACKS.length || domCount !== TRACKS.length) {
+      if (activeTrackId) stopPlayback();
+      renderTracks();
+    }
   }
 
   function bindAudioEvents() {
@@ -280,7 +291,7 @@
       bindAudioEvents();
       initialized = true;
     }
-    if (!tracksRoot.childElementCount) renderTracks();
+    syncTracks();
     if (window.BreatheIcons && window.BreatheIcons.hydrate) {
       window.BreatheIcons.hydrate(tracksRoot);
     }
