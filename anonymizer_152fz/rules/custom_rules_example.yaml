@@ -1,0 +1,16 @@
+custom_patterns:
+  INTERNAL_ID:
+    entity_type: SESSION_TOKEN
+    patterns:
+      - regex: '\bINT-[A-Z0-9]{8,}\b'
+        confidence: 0.95
+  COMPANY_EMAIL:
+    entity_type: EMAIL
+    patterns:
+      - regex: '[a-z0-9._%+\-]+@company\.ru'
+        confidence: 0.99
+
+strategy_overrides:
+  NAME: PSEUDONYMIZE
+  PHONE: TOKENIZE
+  EMAIL: REDACT

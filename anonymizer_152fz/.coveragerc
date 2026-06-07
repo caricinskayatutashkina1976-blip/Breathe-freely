@@ -1,0 +1,10 @@
+[run]
+omit =
+    app/detectors/ner_detector.py
+    app/tasks/*
+    app/db/repositories/pseudonym_repo.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:

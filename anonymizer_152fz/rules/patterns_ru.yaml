@@ -1,0 +1,78 @@
+patterns:
+  PHONE:
+    - regex: '(?:\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}'
+      confidence: 0.95
+    - regex: '\b9\d{9}\b'
+      confidence: 0.80
+  EMAIL:
+    - regex: '[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'
+      confidence: 0.98
+  SNILS:
+    - regex: '\b\d{3}[\s\-]?\d{3}[\s\-]?\d{3}[\s\-]?\d{2}\b'
+      confidence: 0.99
+  INN:
+    - regex: '\b\d{12}\b'
+      confidence: 0.88
+  PASSPORT:
+    - regex: '\b\d{2}\s?\d{2}\s?\d{6}\b'
+      confidence: 0.92
+    - regex: '\b\d{4}\s?\d{6}\b'
+      confidence: 0.90
+  BIRTH_DATE:
+    - regex: '\b(?:0?[1-9]|[12]\d|3[01])[.\-/](?:0?[1-9]|1[0-2])[.\-/](?:19|20)\d{2}\b'
+      confidence: 0.90
+    - regex: '\b(?:19|20)\d{2}[.\-/](?:0?[1-9]|1[0-2])[.\-/](?:0?[1-9]|[12]\d|3[01])\b'
+      confidence: 0.88
+  BIRTH_PLACE:
+    - regex: '(?:г\.|город|с\.|село|пос\.|посёлок)\s+[А-ЯЁа-яё\-]+(?:\s+[А-ЯЁа-яё\-]+)?'
+      confidence: 0.75
+  ADDRESS:
+    - regex: '(?:ул\.|улица|пр\.|проспект|пер\.|переулок|бульвар|ш\.|шоссе)\s+[А-ЯЁа-яё0-9\-\s,.]+?(?:\d{1,3})'
+      confidence: 0.82
+    - regex: '\b\d{6},\s*(?:г\.|город)\s+[А-ЯЁа-яё\-]+'
+      confidence: 0.85
+  DRIVER_LICENSE:
+    - regex: '\b\d{2}\s?[А-ЯЁ]{2}\s?\d{6}\b'
+      confidence: 0.91
+  OMS_POLICY:
+    - regex: '\b\d{16}\b'
+      confidence: 0.70
+  BANK_ACCOUNT:
+    - regex: '\b(?:40817|40702|40802)\d{15}\b'
+      confidence: 0.93
+  IBAN:
+    - regex: '\bRU\d{2}[A-Z0-9]{30}\b'
+      confidence: 0.97
+  IP_ADDRESS:
+    - regex: '\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d?\d)\b'
+      confidence: 0.96
+    - regex: '\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b'
+      confidence: 0.94
+  MAC_ADDRESS:
+    - regex: '\b(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}\b'
+      confidence: 0.97
+  SESSION_TOKEN:
+    - regex: '\b(?:session|token|sid)[=:]\s*[A-Za-z0-9_\-\.]{16,}\b'
+      confidence: 0.85
+    - regex: '\beyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\b'
+      confidence: 0.90
+  PERSONAL_URL:
+    - regex: 'https?://[^\s]+(?:\?|&)(?:user|id|email|phone|token)=[^\s&]+'
+      confidence: 0.88
+  MEDICAL:
+    - regex: '(?:диагноз|заболевание|МКБ[\-\s]?10)[:\s]+[А-ЯЁа-яё0-9\.\-\s]+'
+      confidence: 0.78
+    - regex: '\b[A-Z]\d{2}(?:\.\d{1,2})?\b'
+      confidence: 0.65
+  NATIONALITY:
+    - regex: '(?:национальность|этническое происхождение)[:\s]+[А-ЯЁа-яё\-]+'
+      confidence: 0.80
+  POLITICAL:
+    - regex: '(?:политические взгляды|партийная принадлежность)[:\s]+[А-ЯЁа-яё\s\-]+'
+      confidence: 0.80
+  RELIGION:
+    - regex: '(?:религиозные убеждения|вероисповедание|конфессия)[:\s]+[А-ЯЁа-яё\s\-]+'
+      confidence: 0.80
+  NAME:
+    - regex: '\b[А-ЯЁ][а-яё]+(?:\s+[А-ЯЁ][а-яё]+){1,2}\b'
+      confidence: 0.70
