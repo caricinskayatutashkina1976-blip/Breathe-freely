@@ -2492,6 +2492,10 @@ html.theme-transitioning::before {
   gap: 0.85rem;
 }
 
+.audio-tab-panel[hidden] {
+  display: none !important;
+}
+
 .meditation-tab-intro {
   padding-top: 0.15rem;
 }

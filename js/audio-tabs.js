@@ -76,8 +76,16 @@
       });
     }
 
-    if (panelVoices) panelVoices.hidden = tab !== "voices";
-    if (panelMeditation) panelMeditation.hidden = tab !== "meditation";
+    if (panelVoices) {
+      var showVoices = tab === "voices";
+      panelVoices.hidden = !showVoices;
+      panelVoices.classList.toggle("audio-tab-panel--active", showVoices);
+    }
+    if (panelMeditation) {
+      var showMeditation = tab === "meditation";
+      panelMeditation.hidden = !showMeditation;
+      panelMeditation.classList.toggle("audio-tab-panel--active", showMeditation);
+    }
 
     updateHero(tab);
 
