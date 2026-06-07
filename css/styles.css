@@ -3869,3 +3869,237 @@ body.wellness-achievement-open {
     -webkit-tap-highlight-color: transparent;
   }
 }
+
+/* ——— Legal / Privacy ——— */
+.legal-body .app-shell--legal {
+  min-height: 100dvh;
+}
+
+.main--legal {
+  padding-bottom: calc(1.5rem + var(--safe-bottom));
+}
+
+.legal-page {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+.legal-page__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.legal-page__title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 4vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.legal-page__meta {
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+}
+
+.legal-toc {
+  margin: 0 0 2rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.legal-toc__title {
+  margin: 0 0 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--amber);
+}
+
+.legal-toc__list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.legal-toc__list a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s var(--ease-out-soft), color 0.2s var(--ease-out-soft);
+}
+
+.legal-toc__list a:hover {
+  color: var(--amber);
+  border-bottom-color: var(--amber-line);
+}
+
+.legal-section {
+  margin-bottom: 1.75rem;
+}
+
+.legal-section__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.legal-section p {
+  margin: 0 0 0.85rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.legal-section p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section a {
+  color: var(--amber);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-section strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.legal-section code {
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+  background: var(--amber-soft);
+  color: var(--text);
+}
+
+.legal-note {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--amber);
+  background: var(--amber-soft);
+}
+
+.legal-list {
+  margin: 0 0 0.85rem;
+  padding-left: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.legal-list li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-list--ordered {
+  list-style: decimal;
+}
+
+.legal-table-wrap {
+  overflow-x: auto;
+  margin: 0 0 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.legal-table th,
+.legal-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.legal-table th {
+  font-weight: 600;
+  color: var(--text);
+  background: var(--glass-bg);
+}
+
+.legal-table td {
+  color: var(--text-muted);
+}
+
+.legal-table tr:last-child td {
+  border-bottom: none;
+}
+
+.legal-page__footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.legal-page__footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.legal-page__updated {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+.site-footer {
+  margin-top: 1.5rem;
+  padding: 1rem 0 0.5rem;
+  text-align: center;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__link {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s var(--ease-out-soft), border-color 0.2s var(--ease-out-soft);
+}
+
+.site-footer__link:hover {
+  color: var(--amber);
+  border-bottom-color: var(--amber-line);
+}
+
+.site-footer__note {
+  margin: 0.65rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.top-bar__back {
+  text-decoration: none;
+}
+
+[data-theme="night"] .legal-toc,
+[data-theme="night"] .legal-note {
+  background: rgba(200, 169, 126, 0.08);
+}
