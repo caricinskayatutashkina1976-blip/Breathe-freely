@@ -57,6 +57,9 @@
   var audioEl = new Audio();
   var tracksRoot = null;
   var rafId = null;
+  var initialized = false;
+
+  audioEl.preload = "auto";
 
   function formatTime(sec) {
     if (!isFinite(sec) || sec < 0) return "0:00";
@@ -66,7 +69,18 @@
   }
 
   function getTrackSrc(track) {
-    return "assets/audio/meditation/" + track.num + ".mp3";
+    var relative = "assets/audio/meditation/" + track.num + ".mp3";
+    try {
+      return new URL(relative, document.baseURI || window.location.href).href;
+    } catch (e) {
+      return relative;
+    }
+  }
+
+  function showPlayError() {
+    if (window.BreatheApp && window.BreatheApp.showToast) {
+      window.BreatheApp.showToast("Не удалось воспроизвести трек. Проверьте подключение файлов.");
+    }
   }
 
   function stopOtherPlayers() {
@@ -161,13 +175,32 @@
 
     activeTrackId = trackId;
     var src = getTrackSrc(track);
-    if (audioEl.getAttribute("data-track") !== trackId) {
-      audioEl.src = src;
-      audioEl.setAttribute("data-track", trackId);
+
+    audioEl.pause();
+    audioEl.src = src;
+    audioEl.setAttribute("data-track", trackId);
+    audioEl.load();
+
+    var playPromise = audioEl.play();
+    if (!playPromise || typeof playPromise.then !== "function") {
+      setCardPlaying(trackId, true);
+      startProgressLoop();
+      updateTrackUi(trackId);
+      return;
     }
-    audioEl.play().catch(function () {});
-    setCardPlaying(trackId, true);
-    startProgressLoop();
+
+    playPromise
+      .then(function () {
+        setCardPlaying(trackId, true);
+        startProgressLoop();
+        updateTrackUi(trackId);
+      })
+      .catch(function () {
+        activeTrackId = null;
+        setCardPlaying(trackId, false);
+        updateTrackUi(trackId);
+        showPlayError();
+      });
   }
 
   function buildTrackCard(track) {
@@ -213,13 +246,17 @@
     var btnStop = article.querySelector(".track-btn--stop");
     var range = article.querySelector(".track-player__progress");
 
-    btnPlay.addEventListener("click", function () {
+    btnPlay.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
       playTrack(track.id);
     });
-    btnPause.addEventListener("click", function () {
+    btnPause.addEventListener("click", function (e) {
+      e.preventDefault();
       if (activeTrackId === track.id) pausePlayback();
     });
-    btnStop.addEventListener("click", function () {
+    btnStop.addEventListener("click", function (e) {
+      e.preventDefault();
       if (activeTrackId === track.id) stopPlayback();
     });
     range.addEventListener("input", function () {
@@ -253,15 +290,36 @@
     audioEl.addEventListener("pause", function () {
       if (activeTrackId && !audioEl.ended) updateTrackUi(activeTrackId);
     });
+    audioEl.addEventListener("error", function () {
+      if (!activeTrackId) return;
+      var failedId = activeTrackId;
+      activeTrackId = null;
+      setCardPlaying(failedId, false);
+      updateTrackUi(failedId);
+      stopProgressLoop();
+      showPlayError();
+    });
+  }
+
+  function ensureReady() {
+    if (!tracksRoot) tracksRoot = document.getElementById("meditation-tracks");
+    if (!tracksRoot) return;
+    if (!initialized) {
+      bindAudioEvents();
+      initialized = true;
+    }
+    if (!tracksRoot.childElementCount) renderTracks();
+    if (window.BreatheIcons && window.BreatheIcons.hydrate) {
+      window.BreatheIcons.hydrate(tracksRoot);
+    }
   }
 
   function init() {
-    tracksRoot = document.getElementById("meditation-tracks");
-    renderTracks();
-    bindAudioEvents();
+    ensureReady();
   }
 
   function onScreenShow() {
+    ensureReady();
     if (typeof window.refreshRevealObserver === "function") {
       requestAnimationFrame(window.refreshRevealObserver);
     }
@@ -269,6 +327,7 @@
 
   window.BreatheMeditationMusic = {
     onScreenShow: onScreenShow,
+    ensureReady: ensureReady,
     stopAll: stopPlayback
   };
 

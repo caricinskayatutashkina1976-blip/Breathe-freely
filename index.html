@@ -548,36 +548,37 @@
         <div class="meditation-hero__mist meditation-hero__mist--tab" id="audio-hero-mist-meditation" hidden aria-hidden="true"></div>
         <div class="audiosupport-hero__inner">
           <p class="audiosupport-hero__eyebrow" id="audio-hero-eyebrow">Пространство спокойствия</p>
+
+          <div class="audio-tabs audiosupport-hero__tabs" id="audio-tabs" role="tablist" aria-label="Разделы аудио">
+            <button
+              type="button"
+              class="audio-tabs__btn is-active"
+              id="audio-tab-btn-voices"
+              role="tab"
+              data-audio-tab="voices"
+              aria-selected="true"
+              aria-controls="audio-tab-voices"
+            >
+              <span class="icon icon--sm" data-icon="headphones" data-icon-size="18"></span>
+              <span>Аудиоподдержка</span>
+            </button>
+            <button
+              type="button"
+              class="audio-tabs__btn"
+              id="audio-tab-btn-meditation"
+              role="tab"
+              data-audio-tab="meditation"
+              aria-selected="false"
+              aria-controls="audio-tab-meditation"
+            >
+              <span class="icon icon--sm" data-icon="leaf" data-icon-size="18"></span>
+              <span>Музыка для медитации и расслабления</span>
+            </button>
+          </div>
+
           <h2 class="h2 audiosupport-hero__title" id="audio-hero-title">Аудиоподдержка</h2>
           <p class="audiosupport-hero__lead" id="audio-hero-lead">Выберите голос, который поможет вам пройти этот момент спокойно.</p>
         </div>
-      </div>
-
-      <div class="audio-tabs" id="audio-tabs" role="tablist" aria-label="Разделы аудио">
-        <button
-          type="button"
-          class="audio-tabs__btn is-active"
-          id="audio-tab-btn-voices"
-          role="tab"
-          data-audio-tab="voices"
-          aria-selected="true"
-          aria-controls="audio-tab-voices"
-        >
-          <span class="icon icon--sm" data-icon="headphones" data-icon-size="18"></span>
-          <span>Голоса поддержки</span>
-        </button>
-        <button
-          type="button"
-          class="audio-tabs__btn"
-          id="audio-tab-btn-meditation"
-          role="tab"
-          data-audio-tab="meditation"
-          aria-selected="false"
-          aria-controls="audio-tab-meditation"
-        >
-          <span class="icon icon--sm" data-icon="leaf" data-icon-size="18"></span>
-          <span>Музыка для медитации</span>
-        </button>
       </div>
 
       <div class="audio-tab-panel" id="audio-tab-voices" role="tabpanel" aria-labelledby="audio-tab-btn-voices">
@@ -627,12 +628,6 @@
       </div>
 
       <div class="audio-tab-panel" id="audio-tab-meditation" role="tabpanel" aria-labelledby="audio-tab-btn-meditation" hidden>
-        <div class="card meditation-tab-intro">
-          <p class="meditation-tab-intro__eyebrow">Пространство тишины</p>
-          <p class="meditation-tab-intro__text muted">
-            Атмосферные композиции из коллекции «Медитация Расслабление» — выберите звук, который поддержит вас прямо сейчас.
-          </p>
-        </div>
         <div class="meditation-tracks" id="meditation-tracks" aria-live="polite"></div>
       </div>
     </section>

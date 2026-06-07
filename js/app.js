@@ -154,7 +154,7 @@
     var active = document.querySelector(".screen:not([hidden])");
     if (!active) return;
     var nodes = active.querySelectorAll(
-      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audio-tabs, :scope > .audio-tab-panel:not([hidden]) > .card, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-voices, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-library, :scope > .audio-tab-panel:not([hidden]) > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audio-tab-panel:not([hidden]) > .card, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-voices, :scope > .audio-tab-panel:not([hidden]) > .audiosupport-library, :scope > .audio-tab-panel:not([hidden]) > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
     );
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(
@@ -215,7 +215,7 @@
     if (currentScreen === "sos" && name !== "sos") {
       resetSos();
     }
-    if (name !== currentScreen) {
+    if (name !== currentScreen && currentScreen === "audio") {
       stopAllPlayers();
     }
     if (push !== false && navStack[navStack.length - 1] !== name) {

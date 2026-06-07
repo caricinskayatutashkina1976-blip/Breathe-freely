@@ -4,16 +4,16 @@
   var TAB_KEY = "breatheFreelyAudioTab";
   var currentTab = "voices";
 
+  var HERO_EYEBROW = "Пространство спокойствия";
+
   var heroCopy = {
     voices: {
-      eyebrow: "Пространство спокойствия",
-      title: "Голоса поддержки",
+      title: "Аудиоподдержка",
       lead: "Выберите голос, который поможет вам пройти этот момент спокойно."
     },
     meditation: {
-      eyebrow: "Пространство тишины",
       title: "Музыка для медитации и расслабления",
-      lead: "Атмосферные композиции — лес, туман, горы и сон. Выберите звук под ваш момент."
+      lead: "Атмосферные композиции из коллекции «Медитация Расслабление» — лес, туман, горы и сон."
     }
   };
 
@@ -51,7 +51,7 @@
   function updateHero(tab) {
     var copy = heroCopy[tab];
     if (!copy) return;
-    if (heroEyebrow) heroEyebrow.textContent = copy.eyebrow;
+    if (heroEyebrow) heroEyebrow.textContent = HERO_EYEBROW;
     if (heroTitle) heroTitle.textContent = copy.title;
     if (heroLead) heroLead.textContent = copy.lead;
     if (heroMistMeditation) heroMistMeditation.hidden = tab !== "meditation";
@@ -81,8 +81,9 @@
 
     updateHero(tab);
 
-    if (tab === "meditation" && window.BreatheMeditationMusic && window.BreatheMeditationMusic.onScreenShow) {
-      window.BreatheMeditationMusic.onScreenShow();
+    if (tab === "meditation" && window.BreatheMeditationMusic) {
+      if (window.BreatheMeditationMusic.ensureReady) window.BreatheMeditationMusic.ensureReady();
+      if (window.BreatheMeditationMusic.onScreenShow) window.BreatheMeditationMusic.onScreenShow();
     }
     if (tab === "voices" && window.BreatheAudioSupport && window.BreatheAudioSupport.onScreenShow) {
       window.BreatheAudioSupport.onScreenShow();
@@ -116,6 +117,9 @@
 
     bindTabs();
     setTab(loadSavedTab(), { skipSave: true, silent: true });
+    if (window.BreatheIcons && window.BreatheIcons.hydrate && tabsRoot) {
+      window.BreatheIcons.hydrate(tabsRoot);
+    }
   }
 
   function onScreenShow(preferredTab) {
