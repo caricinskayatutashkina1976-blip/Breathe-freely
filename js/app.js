@@ -73,7 +73,8 @@
     survey: document.getElementById("screen-survey"),
     sos: document.getElementById("screen-sos"),
     progress: document.getElementById("screen-progress"),
-    audio: document.getElementById("screen-audio")
+    audio: document.getElementById("screen-audio"),
+    meditation: document.getElementById("screen-meditation")
   };
 
   var btnBack = document.getElementById("btn-back");
@@ -154,7 +155,7 @@
     var active = document.querySelector(".screen:not([hidden])");
     if (!active) return;
     var nodes = active.querySelectorAll(
-      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
+      ":scope > .card, :scope > aside.card, :scope > .home-grid, :scope > .audiosupport-voices, :scope > .audiosupport-library, :scope > .meditation-tracks, :scope > .wellness-victories, :scope > .wellness-tree, :scope > .wellness-mood, :scope > .wellness-journey, :scope > .wellness-evening, :scope > .wellness-community"
     );
     if (revealObserver) revealObserver.disconnect();
     revealObserver = new IntersectionObserver(
@@ -196,9 +197,21 @@
     btnBack.hidden = name === "home";
   }
 
+  function stopAllPlayers() {
+    if (window.BreatheAudioSupport && window.BreatheAudioSupport.stopAll) {
+      window.BreatheAudioSupport.stopAll();
+    }
+    if (window.BreatheMeditationMusic && window.BreatheMeditationMusic.stopAll) {
+      window.BreatheMeditationMusic.stopAll();
+    }
+  }
+
   function navigate(name, push) {
     if (currentScreen === "sos" && name !== "sos") {
       resetSos();
+    }
+    if (name !== currentScreen) {
+      stopAllPlayers();
     }
     if (push !== false && navStack[navStack.length - 1] !== name) {
       navStack.push(name);
@@ -214,6 +227,9 @@
     if (name === "sos") resetSos();
     if (name === "audio" && window.BreatheAudioSupport) {
       window.BreatheAudioSupport.onScreenShow();
+    }
+    if (name === "meditation" && window.BreatheMeditationMusic) {
+      window.BreatheMeditationMusic.onScreenShow();
     }
     requestAnimationFrame(function () {
       refreshRevealObserver();

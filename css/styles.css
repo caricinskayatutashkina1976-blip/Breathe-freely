@@ -2728,6 +2728,215 @@ html.theme-transitioning::before {
   }
 }
 
+/* ——— Музыка для медитации ——— */
+.meditation-link-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  text-align: left;
+  margin-top: 0.15rem;
+  border-color: rgba(120, 200, 160, 0.28);
+  transition:
+    transform 0.4s var(--ease-out-soft),
+    box-shadow 0.4s ease,
+    border-color 0.35s ease;
+}
+
+.meditation-link-card:hover {
+  border-color: rgba(120, 200, 160, 0.45);
+  box-shadow:
+    var(--shadow),
+    0 0 32px rgba(100, 190, 150, 0.14);
+}
+
+.meditation-link-card__icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.meditation-link-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.meditation-link-card__title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.meditation-link-card__sub {
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.meditation-link-card__arrow {
+  font-size: 1.1rem;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+.meditation-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.meditation-hero__mist {
+  position: absolute;
+  inset: -20% -10%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 55% at 15% 0%, rgba(140, 220, 170, 0.14), transparent 60%),
+    radial-gradient(ellipse 55% 50% at 85% 25%, rgba(100, 180, 210, 0.1), transparent 55%);
+  animation: meditationMist 26s ease-in-out infinite alternate;
+}
+
+@keyframes meditationMist {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(2%, -1%);
+  }
+}
+
+.meditation-hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.meditation-hero__eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mint-deep);
+}
+
+.meditation-hero__title {
+  margin-bottom: 0.55rem;
+}
+
+.meditation-hero__lead {
+  margin: 0;
+  font-size: clamp(0.94rem, 3.2vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 34rem;
+}
+
+.meditation-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 520px) {
+  .meditation-tracks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+}
+
+.meditation-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.meditation-card__glow {
+  position: absolute;
+  inset: -35% -25%;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(130, 210, 170, 0.12), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.meditation-card--active .meditation-card__glow,
+.meditation-card--playing .meditation-card__glow {
+  opacity: 1;
+}
+
+.meditation-card__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.meditation-card--active {
+  border-color: rgba(120, 200, 160, 0.35);
+}
+
+.meditation-card--playing {
+  box-shadow:
+    var(--shadow),
+    0 0 32px rgba(100, 190, 150, 0.16);
+}
+
+.meditation-player {
+  border-color: rgba(120, 200, 160, 0.22);
+}
+
+.meditation-player__ring {
+  background: radial-gradient(circle, rgba(140, 220, 170, 0.35), rgba(90, 180, 140, 0.08) 68%);
+  box-shadow: 0 0 28px rgba(120, 200, 160, 0.32);
+}
+
+.meditation-card .track-btn {
+  border-color: rgba(120, 200, 160, 0.28);
+}
+
+.meditation-card .track-btn:hover:not(:disabled) {
+  box-shadow: 0 0 18px rgba(100, 190, 150, 0.22);
+  background: rgba(140, 220, 170, 0.12);
+}
+
+.meditation-card .track-btn--play:not(:disabled) {
+  background: rgba(120, 200, 160, 0.2);
+  border-color: rgba(140, 220, 170, 0.45);
+}
+
+.meditation-card .track-player__progress::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #b8f0d0, #6ec49a);
+  box-shadow: 0 0 12px rgba(100, 190, 150, 0.55);
+}
+
+.meditation-card .track-player__progress::-moz-range-thumb {
+  background: linear-gradient(135deg, #b8f0d0, #6ec49a);
+  box-shadow: 0 0 12px rgba(100, 190, 150, 0.55);
+}
+
+[data-theme="night"] .meditation-link-card {
+  border-color: rgba(90, 170, 190, 0.28);
+}
+
+[data-theme="night"] .meditation-link-card:hover {
+  border-color: rgba(100, 180, 200, 0.42);
+  box-shadow: var(--shadow), 0 0 28px rgba(80, 160, 190, 0.14);
+}
+
+[data-theme="night"] .meditation-card--playing {
+  box-shadow: var(--shadow), 0 0 28px rgba(80, 170, 190, 0.14);
+}
+
+[data-theme="night"] .meditation-player {
+  border-color: rgba(90, 170, 190, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meditation-hero__mist {
+    animation: none !important;
+  }
+}
+
 /* ——— Wellness: победы, дерево, путь, настроение ——— */
 .wellness-particles {
   position: absolute;

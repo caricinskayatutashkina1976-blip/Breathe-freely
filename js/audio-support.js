@@ -176,6 +176,12 @@
     stopProgressLoop();
   }
 
+  function stopOtherPlayers() {
+    if (window.BreatheMeditationMusic && window.BreatheMeditationMusic.stopAll) {
+      window.BreatheMeditationMusic.stopAll();
+    }
+  }
+
   function playTrack(trackId) {
     if (!selectedVoice) return;
     var track = TRACKS.find(function (t) {
@@ -183,6 +189,7 @@
     });
     if (!track) return;
 
+    stopOtherPlayers();
     hideComplete();
 
     if (activeTrackId && activeTrackId !== trackId) {
@@ -370,6 +377,7 @@
 
   window.BreatheAudioSupport = {
     onScreenShow: onScreenShow,
+    stopAll: stopPlayback,
     refreshReveal: function () {
       if (typeof window.refreshRevealObserver === "function") {
         window.refreshRevealObserver();

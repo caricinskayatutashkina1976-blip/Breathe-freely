@@ -564,6 +564,33 @@
           <p class="audiosupport-complete__after" id="audiosupport-feel-message" hidden>Каждая маленькая победа делает вас сильнее.</p>
         </div>
       </div>
+
+      <button type="button" class="card card--link meditation-link-card" data-nav="meditation">
+        <span class="meditation-link-card__icon" aria-hidden="true">🌿</span>
+        <span class="meditation-link-card__text">
+          <span class="meditation-link-card__title">Музыка для медитации и расслабления</span>
+          <span class="meditation-link-card__sub muted">7 атмосферных треков — лес, туман, горы и сон</span>
+        </span>
+        <span class="meditation-link-card__arrow" aria-hidden="true">→</span>
+      </button>
+    </section>
+
+    <!-- 6. Музыка для медитации -->
+    <section class="screen" id="screen-meditation" data-screen="meditation" aria-label="Музыка для медитации и расслабления" hidden>
+      <div class="card meditation-hero">
+        <div class="meditation-hero__mist" aria-hidden="true"></div>
+        <div class="meditation-hero__inner">
+          <p class="meditation-hero__eyebrow">Пространство тишины</p>
+          <h2 class="h2 meditation-hero__title">🌿 Музыка для медитации и расслабления</h2>
+          <p class="meditation-hero__lead">
+            Атмосферные композиции из коллекции «Медитация Расслабление» — выберите звук, который поддержит вас прямо сейчас.
+          </p>
+        </div>
+      </div>
+
+      <div class="meditation-tracks" id="meditation-tracks" aria-live="polite"></div>
+
+      <button type="button" class="btn btn--outline btn--block" data-nav="audio">← К аудиоподдержке</button>
     </section>
   </main>
 
@@ -583,6 +610,7 @@
 
   <script src="js/wellness.js"></script>
   <script src="js/audio-support.js"></script>
+  <script src="js/meditation-music.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
