@@ -43,11 +43,11 @@
     <span class="top-bar__logo">Дыши Свободно</span>
     <div class="top-bar__end">
       <div class="theme-switch" role="group" aria-label="Тема оформления: светлый режим или Night Calm">
-        <button type="button" class="theme-switch__btn is-active" id="btn-theme-light" data-theme-pick="light" aria-pressed="true" title="Светлый режим">
-          День
+        <button type="button" class="theme-switch__btn is-active" id="btn-theme-light" data-theme-pick="light" aria-pressed="true" aria-label="Светлый режим" title="Светлый режим">
+          <span class="icon icon--sm theme-switch__icon" data-icon="sun" data-icon-size="18"></span>
         </button>
-        <button type="button" class="theme-switch__btn" id="btn-theme-night" data-theme-pick="night" aria-pressed="false" title="Night Calm Mode">
-          Ночь
+        <button type="button" class="theme-switch__btn" id="btn-theme-night" data-theme-pick="night" aria-pressed="false" aria-label="Night Calm Mode" title="Night Calm Mode">
+          <span class="icon icon--sm theme-switch__icon" data-icon="moon" data-icon-size="18"></span>
         </button>
       </div>
     </div>
@@ -412,38 +412,58 @@
           </div>
         </div>
       </div>
-      <div class="card savings-hero" id="savings-card" hidden>
-        <div class="savings-hero__bg" aria-hidden="true"></div>
-        <div class="savings-hero__content">
-          <span class="savings-hero__badge" aria-hidden="true"><span class="icon icon--md" data-icon="star" data-icon-size="22"></span></span>
-          <p class="savings-hero__eyebrow">Твоя забота о бюджете</p>
-          <h3 class="savings-hero__title">Ты уже сохранил</h3>
-          <p class="savings-hero__sum" id="savings-total">0 ₽</p>
-          <p class="savings-hero__lead">
-            Примерная сумма с даты старта — без обещаний и «точных» медицинских цифр, только честный ориентир по анкете.
-          </p>
-          <p class="savings-hero__motivation" id="savings-motivation"></p>
-          <div class="savings-periods" role="list">
-            <div class="savings-period" role="listitem">
-              <span class="savings-period__label">За день</span>
-              <span class="savings-period__value" id="savings-day">0 ₽</span>
-              <span class="savings-period__hint">если день без сигарет при твоём темпе</span>
+      <div class="card savings-calc" id="savings-calc" aria-labelledby="savings-calc-title">
+        <div class="savings-calc__glass" aria-hidden="true"></div>
+        <div class="savings-calc__inner">
+          <p class="savings-calc__eyebrow">Твоя забота о бюджете</p>
+          <h3 class="h2 savings-calc__title" id="savings-calc-title">Сколько я уже сэкономил</h3>
+          <p class="muted savings-calc__sub">Введите данные — расчёт сохранится на этом устройстве.</p>
+
+          <form id="form-savings" class="form savings-calc__form">
+            <div class="field-row">
+              <label class="field">
+                <span class="field__label">Стоимость пачки (₽)</span>
+                <input name="pricePerPack" type="number" min="0" max="99999" step="1" required placeholder="250" value="250" inputmode="numeric" />
+              </label>
+              <label class="field">
+                <span class="field__label">Сигарет в пачке</span>
+                <input name="cigsPerPack" type="number" min="1" max="50" step="1" required placeholder="20" value="20" inputmode="numeric" />
+              </label>
             </div>
-            <div class="savings-period" role="listitem">
-              <span class="savings-period__label">За неделю</span>
-              <span class="savings-period__value" id="savings-week">0 ₽</span>
-              <span class="savings-period__hint">7 дней без покупок «на привычку»</span>
+            <label class="field">
+              <span class="field__label">Сигарет в день (в среднем)</span>
+              <input name="cigsPerDay" type="number" min="0" max="120" step="1" required placeholder="например, 10" inputmode="numeric" />
+            </label>
+            <label class="field">
+              <span class="field__label">Дата начала отказа от курения</span>
+              <input name="quitDate" type="date" required />
+            </label>
+            <button type="submit" class="btn btn--primary btn--block">Рассчитать и сохранить</button>
+          </form>
+
+          <div class="savings-calc__results" id="savings-results" hidden>
+            <p class="savings-calc__total-label">Всего сэкономлено</p>
+            <p class="savings-calc__total" id="savings-total" aria-live="polite">0 ₽</p>
+            <p class="savings-calc__quote">Это деньги, которые вы вернули себе.</p>
+            <div class="savings-calc__grid" role="list">
+              <div class="savings-calc__cell" role="listitem">
+                <span class="savings-calc__cell-label">За день</span>
+                <span class="savings-calc__cell-value" id="savings-day">0 ₽</span>
+              </div>
+              <div class="savings-calc__cell" role="listitem">
+                <span class="savings-calc__cell-label">За неделю</span>
+                <span class="savings-calc__cell-value" id="savings-week">0 ₽</span>
+              </div>
+              <div class="savings-calc__cell" role="listitem">
+                <span class="savings-calc__cell-label">За месяц</span>
+                <span class="savings-calc__cell-value" id="savings-month">0 ₽</span>
+              </div>
+              <div class="savings-calc__cell savings-calc__cell--wide" role="listitem">
+                <span class="savings-calc__cell-label">Сигарет не выкурено</span>
+                <span class="savings-calc__cell-value savings-calc__cell-value--alt" id="savings-cigs-not-smoked">0</span>
+              </div>
             </div>
-            <div class="savings-period" role="listitem">
-              <span class="savings-period__label">За месяц</span>
-              <span class="savings-period__value" id="savings-month">0 ₽</span>
-              <span class="savings-period__hint">30 дней того же ритма</span>
-            </div>
-            <div class="savings-period" role="listitem">
-              <span class="savings-period__label">За год</span>
-              <span class="savings-period__value" id="savings-year">0 ₽</span>
-              <span class="savings-period__hint">365 дней — как ориентир мечты</span>
-            </div>
+            <p class="muted savings-calc__days" id="savings-days-line"></p>
           </div>
         </div>
       </div>

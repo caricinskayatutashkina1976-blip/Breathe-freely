@@ -15,6 +15,7 @@
     quitTimestamp: null,
     pricePerPack: 250,
     cigsPerPack: 20,
+    savings: null,
     path7Checks: [false, false, false, false, false, false, false],
     wellness: {
       totalVictories: 0,
@@ -56,6 +57,7 @@
       var merged = Object.assign({}, defaultState, parsed);
       merged.path7Checks = normalizePath7Checks(merged.path7Checks);
       merged.wellness = normalizeWellness(merged.wellness);
+      merged.savings = normalizeSavings(merged.savings);
       return merged;
     } catch (e) {
       return Object.assign({}, defaultState);
@@ -487,6 +489,7 @@
         state.quitTimestamp = startOfToday().getTime();
       }
     }
+    syncSavingsFromSurvey(state);
     saveState(state);
     showToast("Сохранено на этом устройстве");
     navigate("progress");
@@ -496,6 +499,175 @@
     var d = new Date();
     d.setHours(0, 0, 0, 0);
     return d;
+  }
+
+  function toISODate(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1);
+    var day = String(d.getDate());
+    if (m.length < 2) m = "0" + m;
+    if (day.length < 2) day = "0" + day;
+    return y + "-" + m + "-" + day;
+  }
+
+  function parseISODateLocal(str) {
+    var parts = (str || "").split("-");
+    if (parts.length !== 3) return null;
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    if (isNaN(d.getTime())) return null;
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  function normalizeSavings(raw) {
+    var base = {
+      pricePerPack: 250,
+      cigsPerPack: 20,
+      cigsPerDay: 0,
+      quitDate: null
+    };
+    if (!raw || typeof raw !== "object") return base;
+    base.pricePerPack = Math.max(0, parseFloat(raw.pricePerPack) || 250);
+    base.cigsPerPack = Math.max(1, parseInt(raw.cigsPerPack, 10) || 20);
+    base.cigsPerDay = Math.max(0, parseInt(raw.cigsPerDay, 10) || 0);
+    base.quitDate = typeof raw.quitDate === "string" && raw.quitDate ? raw.quitDate : null;
+    return base;
+  }
+
+  function ensureSavings() {
+    state.savings = normalizeSavings(state.savings);
+    if (state.survey) {
+      if (state.survey.pricePerPack != null) {
+        state.savings.pricePerPack = Math.max(0, parseFloat(state.survey.pricePerPack) || 0);
+      }
+      if (state.survey.cigsPerPack != null) {
+        state.savings.cigsPerPack = Math.max(1, parseInt(state.survey.cigsPerPack, 10) || 20);
+      }
+      if (state.survey.cigsPerDay != null && !state.savings.cigsPerDay) {
+        state.savings.cigsPerDay = Math.max(0, parseInt(state.survey.cigsPerDay, 10) || 0);
+      }
+    }
+    if (!state.savings.quitDate && state.quitTimestamp) {
+      state.savings.quitDate = toISODate(new Date(state.quitTimestamp));
+    }
+    if (state.pricePerPack != null && state.savings.pricePerPack === 250) {
+      state.savings.pricePerPack = Math.max(0, parseFloat(state.pricePerPack) || 250);
+    }
+    if (state.cigsPerPack != null && state.savings.cigsPerPack === 20) {
+      state.savings.cigsPerPack = Math.max(1, parseInt(state.cigsPerPack, 10) || 20);
+    }
+  }
+
+  function syncSavingsFromSurvey(st) {
+    st.savings = normalizeSavings(st.savings);
+    if (!st.survey) return;
+    st.savings.pricePerPack = Math.max(0, parseFloat(st.survey.pricePerPack) || 0);
+    st.savings.cigsPerPack = Math.max(1, parseInt(st.survey.cigsPerPack, 10) || 20);
+    st.savings.cigsPerDay = Math.max(0, parseInt(st.survey.cigsPerDay, 10) || 0);
+    if (st.quitTimestamp) {
+      st.savings.quitDate = toISODate(new Date(st.quitTimestamp));
+    }
+  }
+
+  function computeSavings(params) {
+    var packPrice = Math.max(0, parseFloat(params.pricePerPack) || 0);
+    var packSize = Math.max(1, parseInt(params.cigsPerPack, 10) || 20);
+    var cigsPerDay = Math.max(0, parseInt(params.cigsPerDay, 10) || 0);
+    var perCig = packPrice / packSize;
+    var perDay = perCig * cigsPerDay;
+    var days = 0;
+    if (params.quitDate) {
+      var start = parseISODateLocal(params.quitDate);
+      if (start) {
+        days = Math.max(0, Math.floor((startOfToday().getTime() - start.getTime()) / 86400000));
+      }
+    }
+    var notSmoked = Math.round(days * cigsPerDay);
+    var total = Math.round(perDay * days);
+    return {
+      perDay: Math.round(perDay),
+      perWeek: Math.round(perDay * 7),
+      perMonth: Math.round(perDay * 30),
+      days: days,
+      notSmoked: notSmoked,
+      total: total
+    };
+  }
+
+  function formatMoney(n) {
+    return n.toLocaleString("ru-RU", { maximumFractionDigits: 0 }) + " ₽";
+  }
+
+  function hydrateSavingsForm() {
+    var form = document.getElementById("form-savings");
+    if (!form) return;
+    ensureSavings();
+    form.pricePerPack.value = state.savings.pricePerPack;
+    form.cigsPerPack.value = state.savings.cigsPerPack;
+    form.cigsPerDay.value = state.savings.cigsPerDay || "";
+    form.quitDate.value = state.savings.quitDate || "";
+    form.quitDate.max = toISODate(new Date());
+  }
+
+  function renderSavingsCalc() {
+    var results = document.getElementById("savings-results");
+    if (!results) return;
+    ensureSavings();
+    hydrateSavingsForm();
+    if (!state.savings.quitDate) {
+      results.hidden = true;
+      return;
+    }
+    var calc = computeSavings(state.savings);
+    results.hidden = false;
+    document.getElementById("savings-total").textContent = formatMoney(calc.total);
+    document.getElementById("savings-day").textContent = formatMoney(calc.perDay);
+    document.getElementById("savings-week").textContent = formatMoney(calc.perWeek);
+    document.getElementById("savings-month").textContent = formatMoney(calc.perMonth);
+    document.getElementById("savings-cigs-not-smoked").textContent = String(calc.notSmoked);
+    var daysLine = document.getElementById("savings-days-line");
+    if (daysLine) {
+      var dayWord = calc.days === 1 ? "день" : calc.days >= 2 && calc.days <= 4 ? "дня" : "дней";
+      daysLine.textContent =
+        calc.days === 0
+          ? "Сегодня первый день на пути — каждый рубль уже начинает оставаться с вами."
+          : calc.days + " " + dayWord + " без курения — ориентир по вашим данным.";
+    }
+  }
+
+  var formSavings = document.getElementById("form-savings");
+  if (formSavings) {
+    formSavings.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var fd = new FormData(formSavings);
+      var quitDate = (fd.get("quitDate") || "").trim();
+      if (!quitDate) {
+        showToast("Укажите дату начала отказа");
+        return;
+      }
+      var quitParsed = parseISODateLocal(quitDate);
+      if (!quitParsed || quitParsed.getTime() > startOfToday().getTime()) {
+        showToast("Дата не может быть в будущем");
+        return;
+      }
+      ensureSavings();
+      state.savings.pricePerPack = Math.max(0, parseFloat(fd.get("pricePerPack")) || 0);
+      state.savings.cigsPerPack = Math.max(1, parseInt(fd.get("cigsPerPack"), 10) || 20);
+      state.savings.cigsPerDay = Math.max(0, parseInt(fd.get("cigsPerDay"), 10) || 0);
+      state.savings.quitDate = quitDate;
+      state.quitTimestamp = quitParsed.getTime();
+      state.pricePerPack = state.savings.pricePerPack;
+      state.cigsPerPack = state.savings.cigsPerPack;
+      if (state.survey) {
+        state.survey.pricePerPack = state.savings.pricePerPack;
+        state.survey.cigsPerPack = state.savings.cigsPerPack;
+        state.survey.cigsPerDay = state.savings.cigsPerDay;
+      }
+      saveState(state);
+      renderSavingsCalc();
+      renderProgress();
+      showToast("Расчёт сохранён на этом устройстве");
+    });
   }
 
   /* Progress */
@@ -517,46 +689,6 @@
 
   function dayIndex() {
     return Math.floor(Date.now() / 86400000);
-  }
-
-  function surveyMoneyParams(survey) {
-    var cigsPerDay = Math.max(0, survey.cigsPerDay || 0);
-    var packSize = Math.max(
-      1,
-      parseInt(survey.cigsPerPack, 10) || state.cigsPerPack || 20
-    );
-    var packPrice =
-      survey.pricePerPack != null
-        ? Math.max(0, parseFloat(survey.pricePerPack) || 0)
-        : Math.max(0, parseFloat(state.pricePerPack) || 0);
-    var perCig = packPrice / packSize;
-    var perDay = Math.round(cigsPerDay * perCig);
-    return {
-      cigsPerDay: cigsPerDay,
-      packSize: packSize,
-      packPrice: packPrice,
-      perCig: perCig,
-      perDay: perDay,
-      perWeek: Math.round(perDay * 7),
-      perMonth: Math.round(perDay * 30),
-      perYear: Math.round(perDay * 365)
-    };
-  }
-
-  function savingsMotivationLine(totalRub) {
-    if (totalRub <= 0) {
-      return "С нуля тоже начинают перемены: ты уже выбрал(а) путь, на котором деньги остаются с тобой.";
-    }
-    if (totalRub < 800) {
-      return "Пусть сумма кажется скромной — это уже реальные рубли, которые не ушли в дым.";
-    }
-    if (totalRub < 5000) {
-      return "Заметный «подушечный» запас: можно побаловать себя чем-то тёплым и полезным.";
-    }
-    if (totalRub < 20000) {
-      return "Ты перенаправил(а) серьёзный поток денег — это сильный аргумент в пользу нового ритма.";
-    }
-    return "Цифра достойна уважения: столько можно вложить в жизнь без ежедневной кассы у прилавка.";
   }
 
   function updatePath7Bar() {
@@ -601,41 +733,28 @@
   function renderProgress() {
     var empty = document.getElementById("progress-empty");
     var stats = document.getElementById("progress-stats");
-    var savingsCard = document.getElementById("savings-card");
     var path7Section = document.getElementById("path7-section");
-    var hasQuit = state.quitTimestamp != null;
+    ensureSavings();
+    var hasSavings = !!state.savings.quitDate;
+    var hasQuit = state.quitTimestamp != null || hasSavings;
     var hasSurvey = !!state.survey;
-    var days = 0;
-    if (hasQuit && hasSurvey) {
-      var quit = new Date(state.quitTimestamp);
-      var now = new Date();
-      days = Math.max(0, Math.floor((now.getTime() - quit.getTime()) / 86400000));
-    }
+    var calc = computeSavings(state.savings);
+    var days = calc.days;
 
-    if (!hasQuit || !hasSurvey) {
+    renderSavingsCalc();
+
+    if (!hasSavings && (!hasQuit || !hasSurvey)) {
       empty.hidden = false;
       stats.hidden = true;
-      savingsCard.hidden = true;
       if (path7Section) path7Section.hidden = true;
     } else {
       empty.hidden = true;
       stats.hidden = false;
-      savingsCard.hidden = false;
-      var m = surveyMoneyParams(state.survey);
-      var notSmoked = Math.round(days * m.cigsPerDay);
-      var totalSaved = Math.round(notSmoked * m.perCig);
-
       document.getElementById("stat-days").textContent = String(days);
-      document.getElementById("stat-not-smoked").textContent = String(notSmoked);
-      document.getElementById("savings-total").textContent = formatMoney(totalSaved);
-      document.getElementById("savings-motivation").textContent = savingsMotivationLine(totalSaved);
-      document.getElementById("savings-day").textContent = formatMoney(m.perDay);
-      document.getElementById("savings-week").textContent = formatMoney(m.perWeek);
-      document.getElementById("savings-month").textContent = formatMoney(m.perMonth);
-      document.getElementById("savings-year").textContent = formatMoney(m.perYear);
+      document.getElementById("stat-not-smoked").textContent = String(calc.notSmoked);
     }
 
-    renderPath7(hasQuit && hasSurvey, days);
+    renderPath7(hasQuit && (hasSurvey || hasSavings), days);
 
     var pi = dayIndex() % phrases.length;
     document.getElementById("phrase-day").textContent = phrases[pi];
@@ -665,10 +784,6 @@
       if (li) li.classList.toggle("path7-day--done", t.checked);
       updatePath7Bar();
     });
-  }
-
-  function formatMoney(n) {
-    return n.toLocaleString("ru-RU", { maximumFractionDigits: 0 }) + " ₽";
   }
 
   /* SOS */
